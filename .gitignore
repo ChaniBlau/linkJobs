@@ -10,3 +10,5 @@ coverage/
 uploads/
 tmp/
 /src/generated/prisma
+
+/src/generated/prisma
