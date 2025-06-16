@@ -20,14 +20,10 @@
   
 
 {
-    "compilerOptions": {
-      "target": "ES5",
-      "module": "CommonJS",
-      "outDir": "out",
-      "sourceMap": true,
-      "esModuleInterop": true,       // ✅ הוסף שורה זו
-      "forceConsistentCasingInFileNames": true, // ✅ המלצה נוספת
-      "strict": true                            // ✅ המלצה נוספת
-    }
-  }
-  
+"compilerOptions": {
+"target": "ES5",
+"module": "CommonJS",
+"outDir": "out",
+"sourceMap": true
+}
+}
