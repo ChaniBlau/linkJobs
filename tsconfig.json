@@ -1,8 +1,33 @@
+// {
+// "compilerOptions": {
+// "target": "ES5",
+// "module": "CommonJS",
+// "outDir": "out",
+// "sourceMap": true
+// }
+// }
+
+// {
+//     "compilerOptions": {
+//       "target": "ES5",
+//       "module": "CommonJS",
+//       "outDir": "out",
+//       "sourceMap": true,
+//       "forceConsistentCasingInFileNames": true,
+//       "strict": true
+//     }
+//   }
+  
+
 {
-"compilerOptions": {
-"target": "ES5",
-"module": "CommonJS",
-"outDir": "out",
-"sourceMap": true
-}
-}
+    "compilerOptions": {
+      "target": "ES5",
+      "module": "CommonJS",
+      "outDir": "out",
+      "sourceMap": true,
+      "esModuleInterop": true,       // ✅ הוסף שורה זו
+      "forceConsistentCasingInFileNames": true, // ✅ המלצה נוספת
+      "strict": true                            // ✅ המלצה נוספת
+    }
+  }
+  

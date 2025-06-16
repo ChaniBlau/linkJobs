@@ -1,0 +1,11 @@
+2025-06-16 15:18:43 [INFO]: 🚀 Server is running on port 3000
+2025-06-16 16:09:06 [INFO]: 🚀 Server is running on port 3000
+2025-06-16 16:11:01 [INFO]: 🚀 Server is running on port 3000
+2025-06-16 16:11:16 [INFO]: Attempt to login with email: test@example.com
+2025-06-16 16:11:16 [INFO]: Attempting login for email: test@example.com
+2025-06-16 16:11:16 [INFO]: Login successful for user: test@example.com
+2025-06-16 16:11:16 [INFO]: Login successful for email: test@example.com
+2025-06-16 16:22:34 [INFO]: Attempt to login with email: test@example.com
+2025-06-16 16:22:34 [INFO]: Attempting login for email: test@example.com
+2025-06-16 16:22:34 [INFO]: Login successful for user: test@example.com
+2025-06-16 16:22:34 [INFO]: Login successful for email: test@example.com
