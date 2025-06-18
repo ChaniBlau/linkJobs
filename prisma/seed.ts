@@ -4,8 +4,8 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  const hashedPassword = await bcrypt.hash('123456789', 10);
-  const hashedPassword2 = await bcrypt.hash('123456781', 10);
+  const hashedPassword = await bcrypt.hash('dummy-password-1', 10);
+  const hashedPassword2 = await bcrypt.hash('dummy-password-2', 10);
   const organization = await prisma.organization.create({
     data: {
       name: 'Nvidia',
