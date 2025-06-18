@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output = "../src/prisma"
 }
 
 datasource db {
@@ -8,14 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SUPER_ADMIN  
+  ORG_ADMIN     
+  RECRUITER     
+  VIEWER        
+}
+
 model User {
-  id             Int          @id @default(autoincrement())
-  name           String       
-  email          String       @unique
-  password       String
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String   @unique
+  password       String   @map("hashed_password")   
+  role           Role     @default(VIEWER)
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId Int
-  createdAt      DateTime     @default(now())
+  createdAt      DateTime @default(now())
 }
 
 model Organization {

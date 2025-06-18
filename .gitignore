@@ -9,6 +9,5 @@ logs/
 coverage/
 uploads/
 tmp/
-/src/generated/prisma
-
-/src/generated/prisma
+/src/generated/prisma-client/
+/src/generated/prisma-client/schema.prisma

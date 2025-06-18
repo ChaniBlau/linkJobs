@@ -1,10 +1,12 @@
 {
     "compilerOptions": {
-        "target": "ES5",
+        "target": "es2018",
         "module": "CommonJS",
         "outDir": "out",
         "sourceMap": true,
         "esModuleInterop": true,
-        "allowSyntheticDefaultImports": true
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true
     }
 }
