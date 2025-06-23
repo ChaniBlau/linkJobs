@@ -9,3 +9,23 @@
 2025-06-16 16:22:34 [INFO]: Attempting login for email: test@example.com
 2025-06-16 16:22:34 [INFO]: Login successful for user: test@example.com
 2025-06-16 16:22:34 [INFO]: Login successful for email: test@example.com
+2025-06-17 11:37:14 [INFO]: 🚀 Server is running on port 3000
+2025-06-17 11:37:46 [INFO]: Attempt to login with email: test@example.com
+2025-06-17 11:37:46 [INFO]: Attempting login for email: test@example.com
+2025-06-17 11:37:46 [INFO]: Login successful for user: test@example.com
+2025-06-17 11:37:46 [INFO]: Login successful for email: test@example.com
+2025-06-19 12:15:41 [INFO]: 🚀 Server is running on port 3000
+2025-06-19 14:02:01 [INFO]: 🚀 Server is running on port 3000
+2025-06-19 14:48:32 [INFO]: Attempt to login with email: test@example.com
+2025-06-19 14:48:32 [INFO]: Attempting login for email: test@example.com
+2025-06-19 14:48:32 [INFO]: Login successful for user: test@example.com
+2025-06-19 14:48:32 [INFO]: Login successful for email: test@example.com
+2025-06-19 15:53:06 [INFO]: Attempt to login with email: undefined
+2025-06-19 15:53:06 [INFO]: Attempting login for email: undefined
+2025-06-19 15:53:06 [WARN]: Login failed - user not found: undefined
+2025-06-19 15:53:06 [ERROR]: Login failed for email: undefined - Reason: User not found
+2025-06-19 16:01:24 [INFO]: 🚀 Server is running on port 3000
+2025-06-19 16:07:58 [INFO]: 🚀 Server is running on port 3000
+2025-06-21 22:58:54 [INFO]: 🚀 Server is running on port 3000
+2025-06-21 23:22:12 [INFO]: 🚀 Server is running on port 3000
+2025-06-21 23:58:45 [INFO]: 🚀 Server is running on port 3000

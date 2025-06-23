@@ -12,3 +12,8 @@ tmp/
 /src/generated/prisma
 
 /src/generated/prisma
+combined.log
+error.log
+login.json
+middleware-tests.ps1
+test-login.ps1

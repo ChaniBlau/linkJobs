@@ -1,29 +1,19 @@
-// {
-// "compilerOptions": {
-// "target": "ES5",
-// "module": "CommonJS",
-// "outDir": "out",
-// "sourceMap": true
-// }
-// }
-
-// {
-//     "compilerOptions": {
-//       "target": "ES5",
-//       "module": "CommonJS",
-//       "outDir": "out",
-//       "sourceMap": true,
-//       "forceConsistentCasingInFileNames": true,
-//       "strict": true
-//     }
-//   }
-  
 
 {
-"compilerOptions": {
-"target": "ES5",
-"module": "CommonJS",
-"outDir": "out",
-"sourceMap": true
-}
+  "compilerOptions": {
+    "target": "ES2015",                    // כדי לתמוך ב-#private של Prisma
+    "module": "CommonJS",
+    "moduleResolution": "node",            // חשוב כדי להבין מודולים כמו express, helmet וכו'
+    "esModuleInterop": true,  
+    "allowSyntheticDefaultImports": true,             // כדי לאפשר import express from 'express'
+    "outDir": "dist",                      // תקייה לפלט הקימפול, יותר סטנדרטי מ-"out"
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true                   // מונע שגיאות בקבצי טיפוסים של חבילות npm
+  },
+  "include": ["src"],                      // תקייה עם הקוד שלך
+  "exclude": ["node_modules"],         // לא לקמפל קבצי צד שלישי
+  "typeRoots": ["./src/types", "./node_modules/@types"]
+
 }
