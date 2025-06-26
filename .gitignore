@@ -11,3 +11,4 @@ uploads/
 tmp/
 /src/generated/prisma-client/
 /src/generated/prisma-client/schema.prisma
+backup.sql

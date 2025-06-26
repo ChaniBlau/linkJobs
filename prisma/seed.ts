@@ -1,4 +1,4 @@
-import { PrismaClient, Role } from '@prisma/client';
+import { PrismaClient , Role } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
@@ -9,25 +9,25 @@ async function main() {
   const organization = await prisma.organization.create({
     data: {
       name: 'Nvidia',
-      users: {
+      User: {
         create: [
           {
             name:'Yohav Gal',
             email: 'yoyohgg@gmail.com',
-            password: hashedPassword,
+            hashed_password: hashedPassword,
             role: Role.SUPER_ADMIN,
           },
           {
             name: 'Eden Bar',
             email: 'ede123dd@gmail.com',
-            password: hashedPassword2,
+            hashed_password: hashedPassword2,
             role: Role.RECRUITER,
           },
         ],
       },
     },
     include: {
-      users: true,
+      User: true,
     },
   });
 

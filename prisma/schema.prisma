@@ -8,25 +8,93 @@ datasource db {
 }
 
 enum Role {
-  SUPER_ADMIN  
-  ORG_ADMIN     
-  RECRUITER     
-  VIEWER        
+  SUPER_ADMIN
+  ORG_ADMIN
+  RECRUITER
+  VIEWER
 }
 
-model User {
-  id             Int      @id @default(autoincrement())
+model Group {
+  id             Int          @id @default(autoincrement())
   name           String
-  email          String   @unique
-  password       String   @map("hashed_password")   
-  role           Role     @default(VIEWER)
-  organization   Organization @relation(fields: [organizationId], references: [id])
+  linkedinUrl    String       @unique
   organizationId Int
-  createdAt      DateTime @default(now())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  JobPostings    JobPosting[]
 }
 
 model Organization {
-  id    Int     @id @default(autoincrement())
-  name  String
-  users User[]
+  id          Int          @id @default(autoincrement())
+  name        String
+  Group       Group[]
+  User        User[]
+  JobPostings JobPosting[]
+}
+
+model User {
+  id              Int          @id @default(autoincrement())
+  name            String
+  email           String       @unique
+  hashed_password String
+  role            Role         @default(VIEWER)
+  organizationId  Int
+  createdAt       DateTime     @default(now())
+  Organization    Organization @relation(fields: [organizationId], references: [id])
+
+  Keywords      Keyword[]
+  SavedSearches SavedSearch[]
+}
+
+model JobPosting {
+  id             Int          @id @default(autoincrement())
+  title          String
+  company        String
+  description    String
+  link           String
+  location       String?
+  postingDate    DateTime
+  language       String?
+  isArchived     Boolean      @default(false)
+  organizationId Int
+  groupId        Int
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  Group          Group        @relation(fields: [groupId], references: [id])
+  JobKeywords    JobKeyword[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+}
+
+model Keyword {
+  id          Int          @id @default(autoincrement())
+  word        String
+  weight      Int          @default(1)
+  userId      Int
+  User        User         @relation(fields: [userId], references: [id])
+  JobKeywords JobKeyword[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([word, userId])
+}
+
+model JobKeyword {
+  jobId     Int
+  keywordId Int
+  Job       JobPosting @relation(fields: [jobId], references: [id])
+  Keyword   Keyword    @relation(fields: [keywordId], references: [id])
+
+  @@id([jobId, keywordId])
+}
+
+model SavedSearch {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  name      String
+  keywords  String[] // מילות מפתח כטקסט
+  daysRange Int // טווח ימים: 1, 3, 7, וכו'
+  createdAt DateTime @default(now())
+
+  User User @relation(fields: [userId], references: [id])
 }
