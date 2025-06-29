@@ -1,8 +1,11 @@
 import { PrismaClient , Role } from '@prisma/client';
+// import { PrismaClient, Prisma } from '@prisma/client'; // ✅ כן תקין
+
 import bcrypt from 'bcryptjs';
+// import { PrismaClient  } from '@prisma/client';
 
 const prisma = new PrismaClient();
-
+// const { Role } = Prisma;
 async function main() {
   const hashedPassword = await bcrypt.hash('temp_password_1', 10);
   const hashedPassword2 = await bcrypt.hash('temp_password_2', 10);
@@ -16,12 +19,18 @@ async function main() {
             email: 'yoyohgg@gmail.com',
             hashed_password: hashedPassword,
             role: Role.SUPER_ADMIN,
+            // role: Prisma.Role.SUPER_ADMIN,
+
+            // role: Prisma.Role.SUPER_ADMIN
+
           },
           {
             name: 'Eden Bar',
             email: 'ede123dd@gmail.com',
             hashed_password: hashedPassword2,
             role: Role.RECRUITER,
+            // role: Prisma.Role.RECRUITER
+
           },
         ],
       },
