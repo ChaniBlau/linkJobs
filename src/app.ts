@@ -3,8 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import authRoutes from './routes/auth.routes';
-import userRoutes from './routes/user.routes';
+import organizationUsersRoutes from './routes/organizationUsers.routes';
 
 dotenv.config();
 const app = express();
@@ -14,8 +13,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
+
+app.use('/api/organization-users', organizationUsersRoutes);
 
 app.get('/health', (req, res) => {
   res.send('Server is running');

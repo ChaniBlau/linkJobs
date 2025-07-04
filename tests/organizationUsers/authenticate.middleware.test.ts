@@ -1,7 +1,6 @@
 import { authenticate } from '../../src/middlewares/auth.middleware';
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { Role } from '@prisma/client';
 
 jest.mock('jsonwebtoken');
 
@@ -29,7 +28,7 @@ describe('authenticate middleware', () => {
         expect(mockReq.user).toEqual(payload);
         done();
       } catch (err) {
-        done(err); 
+        done(err);
       }
     };
 

@@ -25,3 +25,7 @@ export const getUserById = (id: number) => {
 export const updateUserById = (id: number, data: Partial<{ role: Role }>) => {
   return prisma.user.update({ where: { id }, data });
 };
+
+export const getUserByEmail = (email: string) => {
+  return prisma.user.findUnique({ where: { email } });
+};
