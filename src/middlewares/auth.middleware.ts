@@ -3,6 +3,7 @@ import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 import jwt from 'jsonwebtoken';
 import { Role, PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
+import { BaseController } from '../api/base/base.controller';
 
 dotenv.config();
 const prisma = new PrismaClient();
@@ -15,9 +16,8 @@ interface JwtPayload {
 
 export const authenticate: RequestHandler = async (req, res, next) => {
   const authHeader = req.headers.authorization;
-
   if (!authHeader?.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Missing token' });
+    return res.status(401).json(BaseController.error('Unauthorized', 'Authorization header is missing or invalid'));
   }
 
   const token = authHeader.split(' ')[1];
@@ -30,14 +30,7 @@ export const authenticate: RequestHandler = async (req, res, next) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'User not found' });
-    }
-
-    if (
-      user.role !== decoded.role ||
-      user.organizationId !== decoded.organizationId
-    ) {
-      return res.status(401).json({ message: 'Invalid token payload' });
+      return res.status(401).json(BaseController.error('User not found', 'The user associated with this token does not exist'));
     }
 
     (req as AuthenticatedRequest).user = {
@@ -46,13 +39,11 @@ export const authenticate: RequestHandler = async (req, res, next) => {
       organizationId: decoded.organizationId,
     };
 
-    return next();
+    next();
   } catch (err) {
-    return res.status(403).json({ message: 'Invalid or expired token' });
+    return res.status(403).json(BaseController.error('Invalid token', 'The provided token is invalid or expired'));
   }
 };
-
-
 
 export const requireAdminRole = (
   req: AuthenticatedRequest,
@@ -62,8 +53,7 @@ export const requireAdminRole = (
   const user = req.user;
 
   if (!user || (user.role !== 'ORG_ADMIN' && user.role !== 'SUPER_ADMIN')) {
-    res.status(403).json({ message: 'Insufficient permissions' });
-    return;
+    return res.status(403).json(BaseController.error('Access denied', 'You do not have permission to perform this action'));
   }
 
   next();

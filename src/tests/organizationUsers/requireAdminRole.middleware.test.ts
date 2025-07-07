@@ -1,7 +1,8 @@
-import { requireAdminRole } from '../../src/middlewares/auth.middleware';
+import { requireAdminRole } from '../../middlewares/auth.middleware';
 import { Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from '../../src/types/AuthenticatedRequest';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { Role } from '@prisma/client';
+import { BaseController } from '../../api/base/base.controller';
 
 describe('requireAdminRole middleware', () => {
   let mockRes: Partial<Response>;
@@ -55,7 +56,9 @@ describe('requireAdminRole middleware', () => {
     requireAdminRole(mockReq, mockRes as Response, mockNext);
 
     expect(mockRes.status).toHaveBeenCalledWith(403);
-    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Insufficient permissions' });
+    expect(mockRes.json).toHaveBeenCalledWith(
+      BaseController.error('Access denied', 'You do not have permission to perform this action')
+    );
     expect(mockNext).not.toHaveBeenCalled();
   });
 
@@ -65,7 +68,9 @@ describe('requireAdminRole middleware', () => {
     requireAdminRole(mockReq, mockRes as Response, mockNext);
 
     expect(mockRes.status).toHaveBeenCalledWith(403);
-    expect(mockRes.json).toHaveBeenCalledWith({ message: 'Insufficient permissions' });
+    expect(mockRes.json).toHaveBeenCalledWith(
+      BaseController.error('Access denied', 'You do not have permission to perform this action')
+    );
     expect(mockNext).not.toHaveBeenCalled();
   });
 });
