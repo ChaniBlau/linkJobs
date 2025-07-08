@@ -1,4 +1,4 @@
-import { BaseController } from "../../src/api/base/base.controller";
+import { BaseController } from "../src/api/base/base.controller";
 
 describe("BaseController", () => {
   it("should return success response", () => {

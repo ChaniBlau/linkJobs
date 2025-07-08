@@ -1,66 +1,89 @@
 import { groupRepository } from '../repositories/group.repository';
 import { Role } from '@prisma/client';
-import { CreateGroupInput } from '../types/CreateGroupInput';
+
+interface CreateGroupInput {
+  name: string;
+  linkedinUrl: string;
+  userRole: Role;
+}
 
 export const groupService = {
-    async createGroup(data: CreateGroupInput) {
-        const { name, linkedinUrl, userRole } = data;
-
-        if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
-            throw new Error('Unauthorized to create group');
-        }
-
-        const existingGroups = await groupRepository.getGroupsByOrganization();
-        const duplicate = existingGroups.find(g => g.linkedinUrl === linkedinUrl);
-        if (duplicate) {
-            throw new Error('Group already exists for this organization');
-        }
-
-        return groupRepository.createGroup({ name, linkedinUrl});
-    },
-
-    async updateGroup(
-        id: number,
-        data: Partial<Omit<CreateGroupInput, 'userRole'>>,
-        userRole: Role
-    ) {
-        if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
-            throw new Error('Unauthorized to update group');
-        }
-
-        const existing = await groupRepository.getGroupById(id);
-        if (!existing) {
-            throw new Error('Group not found');
-        }
-        return groupRepository.updateGroup(id, data);
-    },
-
-    async deleteGroup(id: number, userRole: Role) {
-        if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
-            throw new Error('Unauthorized to delete group');
-        }
-
-        const existing = await groupRepository.getGroupById(id);
-        if (!existing) {
-            throw new Error('Group not found');
-        }
-
-        
-        // const jobCount = await jobRepository.countByGroupId(id);
-        // if (jobCount > 0) {
-        //   throw new Error('Cannot delete group with associated jobs');
-        // }
-
-        return groupRepository.deleteGroup(id);
-    },
-
-    async getGroupsByOrganization(organizationId: number) {
-        const groups = await groupRepository.getGroupsByOrganization();
-
-        if (!groups || groups.length === 0) {
-            throw new Error('No groups found for this organization');
-        }
-
-        return groups;
+  async createGroup({ name, linkedinUrl, userRole }: CreateGroupInput) {
+    if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
+      throw new Error('Unauthorized to create group');
     }
+
+    const existing = await groupRepository.findByLinkedinUrl(linkedinUrl);
+    if (existing) {
+      throw new Error('Group with this LinkedIn URL already exists');
+    }
+
+    return groupRepository.createGroup({ name, linkedinUrl });
+  },
+
+  async updateGroup(
+    groupId: number,
+    data: { name?: string; linkedinUrl?: string },
+    userRole: Role
+  ) {
+    if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
+      throw new Error('Unauthorized to update group');
+    }
+
+    const existing = await groupRepository.getGroupById(groupId);
+    if (!existing) {
+      throw new Error('Group not found');
+    }
+
+    return groupRepository.updateGroup(groupId, data);
+  },
+
+  async deleteGroup(groupId: number, userRole: Role) {
+    if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
+      throw new Error('Unauthorized to delete group');
+    }
+
+    const existing = await groupRepository.getGroupById(groupId);
+    if (!existing) {
+      throw new Error('Group not found');
+    }
+
+    return groupRepository.deleteGroup(groupId);
+  },
+
+  async listAllGroups() {
+    return groupRepository.getAllGroups();
+  },
+
+  async joinGroup(userId: number, groupId: number) {
+    const group = await groupRepository.getGroupById(groupId);
+    if (!group) {
+      throw new Error('Group not found');
+    }
+
+    const isJoined = await groupRepository.isUserInGroup(userId, groupId);
+    if (isJoined) {
+      throw new Error('User already joined this group');
+    }
+
+    return groupRepository.joinGroup(userId, groupId);
+  },
+
+  async leaveGroup(userId: number, groupId: number) {
+    const group = await groupRepository.getGroupById(groupId);
+    if (!group) {
+      throw new Error('Group not found');
+    }
+
+    const isJoined = await groupRepository.isUserInGroup(userId, groupId);
+    if (!isJoined) {
+      throw new Error('User is not a member of this group');
+    }
+
+    return groupRepository.leaveGroup(userId, groupId);
+  },
+
+  async getUserGroups(userId: number) {
+    return groupRepository.getUserGroups(userId);
+  }
 };
