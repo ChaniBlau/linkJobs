@@ -22,7 +22,6 @@ export const createGroup = async (req: Request, res: Response) => {
     const group = await groupService.createGroup({
       name: body.name,
       linkedinUrl: body.linkedinUrl,
-      organizationId: body.organizationId,
       userRole: user.role,
     });
 

@@ -29,7 +29,6 @@ export const authenticate: RequestHandler = (req, res, next) => {
     (req as AuthenticatedRequest).user = {
       id: decoded.id,
       role: decoded.role as Role,
-      organizationId: decoded.organizationId,
     };
 
     next();

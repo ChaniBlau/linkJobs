@@ -4,19 +4,19 @@ import { CreateGroupInput } from '../types/CreateGroupInput';
 
 export const groupService = {
     async createGroup(data: CreateGroupInput) {
-        const { name, linkedinUrl, organizationId, userRole } = data;
+        const { name, linkedinUrl, userRole } = data;
 
         if (userRole !== 'SUPER_ADMIN' && userRole !== 'ORG_ADMIN') {
             throw new Error('Unauthorized to create group');
         }
 
-        const existingGroups = await groupRepository.getGroupsByOrganization(organizationId);
+        const existingGroups = await groupRepository.getGroupsByOrganization();
         const duplicate = existingGroups.find(g => g.linkedinUrl === linkedinUrl);
         if (duplicate) {
             throw new Error('Group already exists for this organization');
         }
 
-        return groupRepository.createGroup({ name, linkedinUrl, organizationId });
+        return groupRepository.createGroup({ name, linkedinUrl});
     },
 
     async updateGroup(
@@ -55,7 +55,7 @@ export const groupService = {
     },
 
     async getGroupsByOrganization(organizationId: number) {
-        const groups = await groupRepository.getGroupsByOrganization(organizationId);
+        const groups = await groupRepository.getGroupsByOrganization();
 
         if (!groups || groups.length === 0) {
             throw new Error('No groups found for this organization');

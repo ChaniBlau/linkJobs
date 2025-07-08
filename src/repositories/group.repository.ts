@@ -7,13 +7,13 @@ export const groupRepository = {
     return prisma.group.findUnique({ where: { id } });
   },
 
-  createGroup: (data: Pick<Group, 'name' | 'linkedinUrl' | 'organizationId'>): Promise<Group> => {
+  createGroup: (data: Pick<Group, 'name' | 'linkedinUrl'>): Promise<Group> => {
     return prisma.group.create({ data });
   },
 
   updateGroup: (
     id: number,
-    data: Partial<Pick<Group, 'name' | 'linkedinUrl' | 'organizationId'>>
+    data: Partial<Pick<Group, 'name' | 'linkedinUrl'>>
   ): Promise<Group> => {
     return prisma.group.update({
       where: { id },
@@ -25,7 +25,7 @@ export const groupRepository = {
     return prisma.group.delete({ where: { id } });
   },
 
-  getGroupsByOrganization: (organizationId: number): Promise<Group[]> => {
-    return prisma.group.findMany({ where: { organizationId } });
+  getGroupsByOrganization: (): Promise<Group[]> => {
+    return prisma.group.findMany({ where: {  } });
   },
 };
