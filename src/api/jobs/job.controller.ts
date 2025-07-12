@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { filterJobPosts, saveJobPost } from "../../services/job-filter.service";
 import { scrapeDetectAndSaveAuto } from "../../services/job-scraper.service";
 import { BaseController } from "../base/base.controller";
-
+import logger from '../../utils/logger';
 /**
  * Identifies which posts include job offers based on user keywords
  */
@@ -10,19 +10,23 @@ export const detectJobPosts = async (req: Request, res: Response) => {
   try {
     const userId = req.body.userId;
     const rawPosts: string[] = req.body.posts;
+    logger.info(`🔍 detectJobPosts called by user ${userId}, with ${rawPosts?.length || 0} posts`);
 
     if (!userId || !Array.isArray(rawPosts)) {
+      logger.warn(`⚠️ Invalid input: Missing userId or posts`);
       return res.status(400).json(
         BaseController.error("Invalid input: 'userId' and 'posts[]' are required.")
       );
     }
 
     const filteredPosts = await filterJobPosts(rawPosts, userId);
+    logger.info(`✅ ${filteredPosts.length} posts detected as jobs for user ${userId}`);
 
     return res.status(200).json(
       BaseController.success("Job posts detected successfully", filteredPosts)
     );
   } catch (error) {
+    logger.error(`❌ Error detecting job posts: ${error}`);
     console.error(error);
     return res.status(500).json(
       BaseController.error("Failed to process job post detection", error)
@@ -46,8 +50,10 @@ export const createJobPost = async (req: Request, res: Response) => {
       language,
       groupId,
     } = req.body;
+    logger.info(`📝 createJobPost called with title: ${title}, company: ${company}`);
 
     if (!title || !company || !description || !link || !postingDate || !groupId) {
+      logger.warn(`⚠️ Missing required fields in job post request`);
       return res.status(400).json(
         BaseController.error("Missing required fields for job post creation.")
       );
@@ -64,11 +70,12 @@ export const createJobPost = async (req: Request, res: Response) => {
       groupId,
     });
 
+    logger.info(`✅ Job post saved successfully: ${jobPost.title} at ${jobPost.company}`);
     return res.status(201).json(
       BaseController.success("Job post created successfully", jobPost)
     );
   } catch (error: any) {
-    console.error("Error creating job post:", error);
+    logger.error(`❌ Error creating job post: ${error.message}`);
 
     const errorMessage =
       error?.code === 'P2002'
@@ -88,6 +95,7 @@ export const createJobPost = async (req: Request, res: Response) => {
 export const scrapeJobsHandler = async (req: Request, res: Response) => {
   try {
     const { groupId, userId } = req.body;
+    logger.info(`🕸️ scrapeJobsHandler called for group ${groupId}, user ${userId}`);
 
     if (!groupId || !userId) {
       return res.status(400).json(
@@ -96,14 +104,17 @@ export const scrapeJobsHandler = async (req: Request, res: Response) => {
     }
 
     const savedPosts = await scrapeDetectAndSaveAuto(groupId, userId);
+    logger.info(`✅ Scraping complete – saved ${savedPosts.length} posts for group ${groupId}`);
 
     return res.status(200).json(
       BaseController.success(`Saved ${savedPosts.length} job posts`, savedPosts)
     );
+
   } catch (error: any) {
-    console.error(error);
+    logger.error(`❌ Failed to scrape job posts: ${error?.message || error}`);
     return res.status(500).json(
       BaseController.error("Failed to scrape and save job posts", error?.message || error)
     );
   }
+
 };

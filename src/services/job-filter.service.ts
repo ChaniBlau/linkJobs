@@ -2,6 +2,7 @@ import prisma from "../config/prisma";
 import { isJobPost } from "./nlp.service";
 import * as jobRepository from "../repositories/jobs/job.repository";
 import { JobPosting } from "@prisma/client";
+import logger from '../utils/logger';
 
 /**
  * Filters raw LinkedIn posts and returns only those that match job-related keywords
@@ -12,13 +13,20 @@ import { JobPosting } from "@prisma/client";
  * @returns Array of post texts identified as job posts
  */
 export async function filterJobPosts(rawPosts: string[], userId: number): Promise<string[]> {
-  if (!rawPosts.length) return [];
-
+  if (!rawPosts.length) {
+    logger.warn(`⚠️ filterJobPosts: Received empty post list for user ${userId}`);
+    return [];
+  }
   const keywords = await prisma.keyword.findMany({ where: { userId } });
 
-  if (!keywords.length) return [];
+  if (!keywords.length) {
+    logger.warn(`⚠️ filterJobPosts: No keywords found for user ${userId}`);
+    return [];
+  }
 
-  return rawPosts.filter(post => isJobPost(post, keywords));
+  const filtered = rawPosts.filter(post => isJobPost(post, keywords));
+  logger.info(`✅ filterJobPosts: Found ${filtered.length} relevant posts for user ${userId}`);
+  return filtered;
 }
 
 /**
@@ -35,8 +43,11 @@ export const saveJobPost = async (
   });
 
   if (existing) {
+    logger.warn(`🔁 saveJobPost: Duplicate job link detected – ${data.link}`);
     throw new Error(`A job post with this link already exists`);
   }
 
-  return jobRepository.createJobPosting(data);
+  const saved = await jobRepository.createJobPosting(data);
+  logger.info(`💾 Job saved successfully: ${saved.title} at ${saved.company}`);
+  return saved;
 };

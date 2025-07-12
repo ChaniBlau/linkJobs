@@ -4,6 +4,7 @@ import { extractJobDataFromText } from './extract-job-data.service';
 import { createJobPosting } from '../repositories/jobs/job.repository';
 import prisma from '../config/prisma';
 import { JobPosting } from '@prisma/client';
+import logger from '../utils/logger';
 
 /**
  * Scrapes job posts from a LinkedIn group, detects relevant posts using NLP,
@@ -13,42 +14,47 @@ export async function scrapeDetectAndSaveAuto(
   groupId: number,
   userId: number
 ): Promise<JobPosting[]> {
+  logger.info(`🟢 Starting scrapeDetectAndSaveAuto for group ${groupId}, user ${userId}`);
   const group = await prisma.group.findUnique({
     where: { id: groupId }
   });
 
   if (!group) {
+    logger.warn(`⚠️ Group with ID ${groupId} not found`);
     throw new Error(`Group with ID ${groupId} not found`);
   }
+  logger.info(`🔗 Found group URL: ${group.linkedinUrl}`);
 
-  // שלב 2: קריאת נתוני הסביבה
   const groupUrl = group.linkedinUrl;
   const email = process.env.LINKEDIN_EMAIL || '';
   const password = process.env.LINKEDIN_PASSWORD || '';
 
   if (!email || !password) {
+    logger.error(`❌ Missing LinkedIn credentials`);
     throw new Error(`Missing LinkedIn credentials in environment variables`);
   }
 
-  // שלב 3: סקרייפינג של פוסטים גולמיים מהקבוצה
+  //Scrape posts from LinkedIn group
+  logger.info(`🌐 Scraping posts from LinkedIn group ${groupId}`);
   const rawPosts = await scrapeLinkedInGroupPosts(groupUrl, email, password);
 
   if (!rawPosts.length) {
-    console.warn(`No posts found in group ${groupId}`);
+    logger.warn(`📭 No posts found in group ${groupId}`);
     return [];
   }
+  logger.info(`📦 Retrieved ${rawPosts.length} raw posts`);
 
-  // שלב 4: שליפת מילות מפתח של המשתמש
+  //Load user keywords for filtering
   const keywords = await prisma.keyword.findMany({
     where: { userId }
   });
 
   if (!keywords.length) {
-    console.warn(`User ${userId} has no keywords defined`);
+    logger.warn(`⚠️ User ${userId} has no keywords`);
     return [];
   }
-
-  // שלב 5: שליפת לינקים קיימים מראש למניעת כפילויות
+  logger.info(`🔑 Loaded ${keywords.length} keywords for user ${userId}`);
+  // select existing posts to avoid duplicates
   const existingPosts = await prisma.jobPosting.findMany({
     where: {
       link: {
@@ -63,12 +69,16 @@ export async function scrapeDetectAndSaveAuto(
   const existingLinks = new Set(existingPosts.map(p => p.link));
   const savedPosts: JobPosting[] = [];
 
-  // שלב 6: לולאה על כל הפוסטים
+  // start processing each post
   for (const postText of rawPosts) {
-    // שלב 6.1: סינון NLP
-    if (!isJobPost(postText, keywords)) continue;
+    // filter job posts using NLP
+    if (!isJobPost(postText, keywords)) {
+      logger.info(`⛔ Post skipped – did not match keywords`);
+      continue;
+    }
 
-    // שלב 6.2: חילוץ נתונים מהטקסט
+
+    // extract job data from the post text
     const extracted = extractJobDataFromText(postText);
 
     if (
@@ -78,27 +88,32 @@ export async function scrapeDetectAndSaveAuto(
       !extracted?.description ||
       !extracted?.postingDate
     ) {
+      logger.warn(`⚠️ Post matched keywords but missing required fields – skipping`);
       continue;
     }
 
-    // שלב 6.3: בדיקה אם הפוסט כבר נשמר
-    if (existingLinks.has(extracted.link)) continue;
+    // check if the post already saved
+    if (existingLinks.has(extracted.link)) {
+      logger.info(`🔁 Duplicate post detected – skipping: ${extracted.link}`);
+      continue;
+    }
 
-    // שלב 6.4: שמירה למסד הנתונים
+    // save the job post to the database
     const saved = await createJobPosting({
       title: extracted.title,
       company: extracted.company,
       description: extracted.description,
       link: extracted.link,
-      location: extracted.location,
+      location: extracted.location ?? null,
       postingDate: extracted.postingDate,
-      language: extracted.language,
+      language: extracted.language ?? null,
       groupId
     });
+    logger.info(`✅ Saved job: ${saved.title} at ${saved.company}`);
 
     savedPosts.push(saved);
-    existingLinks.add(extracted.link); // למקרה של כפילות בתוך אותו סשן
+    existingLinks.add(extracted.link);
   }
-
+  logger.info(`🎯 Finished saving ${savedPosts.length} job posts`);
   return savedPosts;
 }

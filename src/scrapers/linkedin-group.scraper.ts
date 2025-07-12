@@ -1,6 +1,7 @@
 import { Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import logger from '../utils/logger';
 
 puppeteer.use(StealthPlugin());
 
@@ -19,18 +20,24 @@ async function autoScroll(page: Page, maxAttempts: number = 10, delay: number = 
 }
 
 /**
- * שליפת טקסטים מקבוצת לינקדאין
- * @param groupUrl כתובת URL של קבוצת לינקדאין
- * @param email אימייל חשבון
- * @param password סיסמה לחשבון
- * @returns מערך פוסטים טקסטואליים
+ * Logs into a LinkedIn account, navigates to a specific group URL,
+ * scrolls through the page to load additional posts,
+ * and extracts the text content from all visible posts.
+ *
+ * @param {string} groupUrl - The URL of the LinkedIn group to scrape.
+ * @param {string} email - The email address used to log in to LinkedIn.
+ * @param {string} password - The password used to log in to LinkedIn.
+ * @returns {Promise<string[]>} An array of post texts extracted from the group page.
+ *
+ * @throws {Error} If login fails or the page structure is unexpected.
  */
+
 export async function scrapeLinkedInGroupPosts(
   groupUrl: string,
   email: string,
   password: string
 ): Promise<string[]> {
-  console.log("🚀 Launching browser...");
+  logger.info("🚀 Launching browser...")
   const browser = await puppeteer.launch({
     headless: process.env.HEADLESS !== 'false',
     defaultViewport: { width: 1280, height: 800 },
@@ -40,7 +47,7 @@ export async function scrapeLinkedInGroupPosts(
   const page = await browser.newPage();
 
   try {
-    console.log("🔐 Logging in to LinkedIn...");
+    logger.info("🔐 Logging in to LinkedIn...")
     await page.goto('https://www.linkedin.com/login', { waitUntil: 'networkidle2' });
 
     await page.type('#username', email, { delay: 50 });
@@ -52,16 +59,17 @@ export async function scrapeLinkedInGroupPosts(
     ]);
 
     if (page.url().includes('/checkpoint')) {
+      logger.error("❌ Login checkpoint – authentication failed");
       throw new Error("❌ Login checkpoint – authentication failed");
     }
 
-    console.log("📥 Navigating to group page...");
+    logger.info("📥 Navigating to group page...");
     await page.goto(groupUrl, { waitUntil: 'networkidle2' });
 
-    console.log("📜 Scrolling to load posts...");
+    logger.info("📜 Scrolling to load posts...");
     await autoScroll(page);
 
-    console.log("🔍 Extracting post texts...");
+    logger.info("🔍 Extracting post texts...");
     const posts = await page.evaluate(() => {
       const elements = Array.from(
         document.querySelectorAll('[data-test-post-container], .feed-shared-update-v2')
@@ -72,13 +80,13 @@ export async function scrapeLinkedInGroupPosts(
         .filter(Boolean);
     });
 
-    console.log(`✅ Found ${posts.length} posts`);
+    logger.info(`✅ Found ${posts.length} posts`);
     return posts;
   } catch (err) {
-    console.error('[❌ scrapeLinkedInGroupPosts] Error:', err);
-    throw err; // כדי שיתפוס למעלה
+    logger.error('[❌ scrapeLinkedInGroupPosts] Error:', err);
+    throw err; 
   } finally {
     await browser.close();
-    console.log("🧹 Browser closed");
+    logger.info("🧹 Browser closed");
   }
 }
