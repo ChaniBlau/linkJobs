@@ -6,36 +6,28 @@ export type ExtractedJobData = {
   link: string;
   location?: string;
   language?: string;
-  organizationId: number;
-  groupId: number;
 };
 
 export function extractJobDataFromText(text: string): Partial<ExtractedJobData> | null {
-  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
   const lowerLines = lines.map(line => line.toLowerCase());
 
+  const findField = (prefix: string): string | undefined => {
+    const raw = lines.find((line, i) => lowerLines[i].startsWith(`${prefix.toLowerCase()}:`));
+    return raw?.replace(new RegExp(`^${prefix}:\\s*`, 'i'), '');
+  };
+
   const title = lines.find((line, i) =>
-    lowerLines[i].includes('developer') || lowerLines[i].includes('engineer')
+    ['developer', 'engineer', 'fullstack', 'software', 'data'].some(keyword =>
+      lowerLines[i].includes(keyword)
+    )
   );
 
-  const companyRaw = lines.find((line, i) =>
-    lowerLines[i].startsWith('company:')
-  );
-  const company = companyRaw?.replace(/^company:\s*/i, '');
-
-  const link = lines.find(line => line.startsWith('http'));
-
-  const locationRaw = lines.find((line, i) =>
-    lowerLines[i].startsWith('location:')
-  );
-  const location = locationRaw?.replace(/^location:\s*/i, '');
-
-  const languageRaw = lines.find((line, i) =>
-    lowerLines[i].startsWith('language:')
-  );
-  const language = languageRaw?.replace(/^language:\s*/i, '');
-
-  const postingDate = new Date(); 
+  const company = findField('Company');
+  const link = lines.find(line => /^https?:\/\//.test(line));
+  const location = findField('Location');
+  const language = findField('Language');
+  const postingDate = new Date();
   const description = text;
 
   if (!title || !company || !link) {

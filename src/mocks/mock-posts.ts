@@ -1,4 +1,4 @@
-export const mockLinkedInPosts = [
+export const mockLinkedInPosts: string[] = [
   `Company: DevHouse
 Looking for a React Developer with 2+ years experience.
 Location: Jerusalem

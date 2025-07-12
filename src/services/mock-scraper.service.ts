@@ -1,7 +1,10 @@
 import { mockLinkedInPosts } from '../mocks/mock-posts';
 
 /**
- * מחזיר פוסטים מדומים במקום לשלוף מלינקדאין
+ * Returns mock LinkedIn group posts for testing and development.
+ * Use this function instead of real scraping in test environments.
+ *
+ * @returns Promise<string[]> - Array of mock post texts
  */
 export async function mockScrapeLinkedInGroupPosts(): Promise<string[]> {
   return mockLinkedInPosts;

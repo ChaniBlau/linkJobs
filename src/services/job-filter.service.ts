@@ -1,29 +1,42 @@
 import prisma from "../config/prisma";
 import { isJobPost } from "./nlp.service";
 import * as jobRepository from "../repositories/jobs/job.repository";
-import { JobPosting } from '@prisma/client';
-// import { scrapeLinkedInGroupPosts } from "../scrapers/linkedin-group.scraper";
+import { JobPosting } from "@prisma/client";
 
+/**
+ * Filters raw LinkedIn posts and returns only those that match job-related keywords
+ * for the given user.
+ *
+ * @param rawPosts - Array of raw post texts (usually scraped from LinkedIn)
+ * @param userId - The user ID whose keywords will be used for filtering
+ * @returns Array of post texts identified as job posts
+ */
 export async function filterJobPosts(rawPosts: string[], userId: number): Promise<string[]> {
-    const keywords = await prisma.keyword.findMany({
-        where: { userId }
-    });
+  if (!rawPosts.length) return [];
 
-    return rawPosts.filter(post => isJobPost(post, keywords));
+  const keywords = await prisma.keyword.findMany({ where: { userId } });
+
+  if (!keywords.length) return [];
+
+  return rawPosts.filter(post => isJobPost(post, keywords));
 }
 
-export const saveJobPost = async (data: Omit<JobPosting, 'id' | 'createdAt' | 'updatedAt' | 'isArchived'>) => {
+/**
+ * Saves a single job post to the database.
+ *
+ * @param data - Partial job post data, excluding auto-managed fields
+ * @returns The created JobPosting object
+ */
+export const saveJobPost = async (
+  data: Omit<JobPosting, 'id' | 'createdAt' | 'updatedAt' | 'isArchived'>
+): Promise<JobPosting> => {
+  const existing = await prisma.jobPosting.findFirst({
+    where: { link: data.link }
+  });
+
+  if (existing) {
+    throw new Error(`A job post with this link already exists`);
+  }
+
   return jobRepository.createJobPosting(data);
 };
-
-
-// (async () => {
-//   const posts = await scrapeLinkedInGroupPosts(
-//     'https://www.linkedin.com/groups/123456789/', 
-//     process.env.LINKEDIN_EMAIL || '',
-//     process.env.LINKEDIN_PASSWORD || ''
-//   );
-
-//   console.log('Posts found:', posts.length);
-//   console.log(posts);
-// })();
