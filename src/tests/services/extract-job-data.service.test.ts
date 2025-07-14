@@ -72,4 +72,19 @@ describe('extractJobDataFromText', () => {
     expect(result?.language).toBe('English');
   });
 
+  it('should find the first valid link anywhere in the post', () => {
+    const post = `
+    React Developer
+    Company: Zoominfo
+    Check this out:
+    https://linkedin.com/jobs/123
+    Apply now!
+  `;
+    const result = extractJobDataFromText(post);
+    expect(result).toBeTruthy();
+    expect(result?.link).toContain('linkedin.com');
+  });
+
+
+
 });

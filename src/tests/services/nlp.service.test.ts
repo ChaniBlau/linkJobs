@@ -106,4 +106,10 @@ describe("isJobPost", () => {
     const text = "We're looking for a developer with React";
     expect(isJobPost(text, [], 2)).toBe(false);
   });
+
+  it("should not match partial keyword phrases like 'fullstack'", () => {
+    const text = "We need a fullstack ninja";
+    expect(isJobPost(text, baseKeywords, 2)).toBe(false);
+  });
+
 });
