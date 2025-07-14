@@ -4,30 +4,30 @@ import * as jobRepository from "../repositories/jobs/job.repository";
 import { JobPosting } from "@prisma/client";
 import logger from '../utils/logger';
 
-/**
- * Filters raw LinkedIn posts and returns only those that match job-related keywords
- * for the given user.
- *
- * @param rawPosts - Array of raw post texts (usually scraped from LinkedIn)
- * @param userId - The user ID whose keywords will be used for filtering
- * @returns Array of post texts identified as job posts
- */
-export async function filterJobPosts(rawPosts: string[], userId: number): Promise<string[]> {
-  if (!rawPosts.length) {
-    logger.warn(`⚠️ filterJobPosts: Received empty post list for user ${userId}`);
-    return [];
-  }
-  const keywords = await prisma.keyword.findMany({ where: { userId } });
+// /**
+//  * Filters raw LinkedIn posts and returns only those that match job-related keywords
+//  * for the given user.
+//  *
+//  * @param rawPosts - Array of raw post texts (usually scraped from LinkedIn)
+//  * @param userId - The user ID whose keywords will be used for filtering
+//  * @returns Array of post texts identified as job posts
+//  */
+// export async function filterJobPosts(rawPosts: string[], userId: number): Promise<string[]> {
+//   if (!rawPosts.length) {
+//     logger.warn(`⚠️ filterJobPosts: Received empty post list for user ${userId}`);
+//     return [];
+//   }
+//   const keywords = await prisma.keyword.findMany({ where: { userId } });
 
-  if (!keywords.length) {
-    logger.warn(`⚠️ filterJobPosts: No keywords found for user ${userId}`);
-    return [];
-  }
+//   if (!keywords.length) {
+//     logger.warn(`⚠️ filterJobPosts: No keywords found for user ${userId}`);
+//     return [];
+//   }
 
-  const filtered = rawPosts.filter(post => isJobPost(post, keywords));
-  logger.info(`✅ filterJobPosts: Found ${filtered.length} relevant posts for user ${userId}`);
-  return filtered;
-}
+//   const filtered = rawPosts.filter(post => isJobPost(post, keywords));
+//   logger.info(`✅ filterJobPosts: Found ${filtered.length} relevant posts for user ${userId}`);
+//   return filtered;
+// }
 
 /**
  * Saves a single job post to the database.

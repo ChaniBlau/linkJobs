@@ -1,39 +1,48 @@
 import { Request, Response, NextFunction } from "express";
-import { filterJobPosts, saveJobPost } from "../../services/job-filter.service";
+import { saveJobPost } from "../../services/job-filter.service";
 import { scrapeDetectAndSaveAuto } from "../../services/job-scraper.service";
 import { BaseController } from "../base/base.controller";
+import { Keyword } from "@prisma/client";
+import prisma from "../../config/prisma";
 import logger from '../../utils/logger';
+import { isJobPost } from "../../services/nlp.service";
 /**
  * Identifies which posts include job offers based on user keywords
  */
 export const detectJobPosts = async (req: Request, res: Response) => {
   try {
-    const userId = req.body.userId;
     const rawPosts: string[] = req.body.posts;
-    logger.info(`🔍 detectJobPosts called by user ${userId}, with ${rawPosts?.length || 0} posts`);
+    logger.info(`🔍 detectJobPosts called with ${rawPosts?.length || 0} posts`);
 
-    if (!userId || !Array.isArray(rawPosts)) {
-      logger.warn(`⚠️ Invalid input: Missing userId or posts`);
+    if (!Array.isArray(rawPosts) || !rawPosts.length) {
+      logger.warn(`⚠️ Invalid input: 'posts[]' must be a non-empty array`);
       return res.status(400).json(
-        BaseController.error("Invalid input: 'userId' and 'posts[]' are required.")
+        BaseController.error("Invalid input: 'posts[]' is required and must be an array.")
       );
     }
 
-    const filteredPosts = await filterJobPosts(rawPosts, userId);
-    logger.info(`✅ ${filteredPosts.length} posts detected as jobs for user ${userId}`);
+    const keywords: Keyword[] = await prisma.keyword.findMany();
+
+    if (!keywords.length) {
+      logger.warn(`⚠️ No global keywords found`);
+      return res.status(400).json(
+        BaseController.error("No global keywords found in the system.")
+      );
+    }
+
+    const filteredPosts = rawPosts.filter(post => isJobPost(post, keywords));
+    logger.info(`✅ Found ${filteredPosts.length} job-related posts (global detection)`);
 
     return res.status(200).json(
       BaseController.success("Job posts detected successfully", filteredPosts)
     );
   } catch (error) {
     logger.error(`❌ Error detecting job posts: ${error}`);
-    console.error(error);
     return res.status(500).json(
-      BaseController.error("Failed to process job post detection", error)
+      BaseController.error("Failed to process global job post detection", error)
     );
   }
 };
-
 /**
  * Manually create a job post by entering details
  * This is primarily for testing purposes
@@ -94,16 +103,16 @@ export const createJobPost = async (req: Request, res: Response) => {
  */
 export const scrapeJobsHandler = async (req: Request, res: Response) => {
   try {
-    const { groupId, userId } = req.body;
-    logger.info(`🕸️ scrapeJobsHandler called for group ${groupId}, user ${userId}`);
+    const { groupId} = req.body;
+    logger.info(`🕸️ scrapeJobsHandler called for group ${groupId}`);
 
-    if (!groupId || !userId) {
+    if (!groupId) {
       return res.status(400).json(
-        BaseController.error("Missing 'groupId' or 'userId'")
+        BaseController.error("Missing 'groupId' in request body")
       );
     }
 
-    const savedPosts = await scrapeDetectAndSaveAuto(groupId, userId);
+    const savedPosts = await scrapeDetectAndSaveAuto(groupId);
     logger.info(`✅ Scraping complete – saved ${savedPosts.length} posts for group ${groupId}`);
 
     return res.status(200).json(

@@ -13,12 +13,11 @@ export function isJobPost(
     .replace(/\s+/g, " ")
     .trim();
 
-  const words = normalized.split(" ");
   let matches = 0;
 
   for (const keyword of keywords) {
-    const word = keyword.word.toLowerCase();
-    if (words.includes(word)) {
+    const keywordText = keyword.word.toLowerCase().trim();
+    if (normalized.includes(keywordText)) {
       matches++;
     }
   }

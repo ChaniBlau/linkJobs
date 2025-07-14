@@ -11,10 +11,9 @@ import logger from '../utils/logger';
  * extracts job data, and saves them to the database.
  */
 export async function scrapeDetectAndSaveAuto(
-  groupId: number,
-  userId: number
+  groupId: number
 ): Promise<JobPosting[]> {
-  logger.info(`🟢 Starting scrapeDetectAndSaveAuto for group ${groupId}, user ${userId}`);
+  logger.info(`🟢 Starting scrapeDetectAndSaveAuto for group ${groupId}`);
   const group = await prisma.group.findUnique({
     where: { id: groupId }
   });
@@ -44,16 +43,13 @@ export async function scrapeDetectAndSaveAuto(
   }
   logger.info(`📦 Retrieved ${rawPosts.length} raw posts`);
 
-  //Load user keywords for filtering
-  const keywords = await prisma.keyword.findMany({
-    where: { userId }
-  });
+  const keywords = await prisma.keyword.findMany(); 
 
   if (!keywords.length) {
-    logger.warn(`⚠️ User ${userId} has no keywords`);
+    logger.warn(`⚠️ There are no keywords`);
     return [];
   }
-  logger.info(`🔑 Loaded ${keywords.length} keywords for user ${userId}`);
+  logger.info(`🔑 Loaded ${keywords.length} keywords `);
   // select existing posts to avoid duplicates
   const existingPosts = await prisma.jobPosting.findMany({
     where: {
