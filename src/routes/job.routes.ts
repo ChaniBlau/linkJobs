@@ -5,6 +5,7 @@ import {
   scrapeJobsHandler
 } from "../api/jobs/job.controller";
 import { authenticate } from '../middlewares/auth.middleware';
+import { searchJobsByKeywordsController } from "../api/fuzzyMatch/fuzzy-match-controller";
 
 const router = Router();
 
@@ -17,5 +18,7 @@ router.post("/",authenticate, createJobPost);
 // scrape job posts from LinkedIn group and save them to the database
 router.post("/scrape-detect",authenticate, scrapeJobsHandler);
 
+
+router.get('/search',authenticate, searchJobsByKeywordsController);
 
 export default router;
