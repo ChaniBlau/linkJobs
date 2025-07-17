@@ -1,5 +1,10 @@
 import { getSimilarityScore } from "../../utils/fuzzy-match.util";
 
+// נשתיק את הלוגים בטסט
+jest.mock('../../utils/logger', () => ({
+  warn: jest.fn(),
+}));
+
 describe('getSimilarityScore', () => {
   const keywords = ['developer', 'react', 'engineer', 'backend'];
 
@@ -18,7 +23,7 @@ describe('getSimilarityScore', () => {
   it('should ignore case and punctuation', () => {
     const text = 'React!!! Developer? Backend';
     const score = getSimilarityScore(text, keywords);
-    expect(score).toBeGreaterThanOrEqual(2);
+    expect(score).toBeGreaterThanOrEqual(2); // יכול להיות גם 3
   });
 
   it('should return 0 if keywords list is empty', () => {
@@ -29,6 +34,21 @@ describe('getSimilarityScore', () => {
 
   it('should return 0 for empty text', () => {
     const score = getSimilarityScore('', keywords);
+    expect(score).toBe(0);
+  });
+
+  it('should return 0 if text is undefined', () => {
+    const score = getSimilarityScore(undefined as unknown as string, keywords);
+    expect(score).toBe(0);
+  });
+
+  it('should return 0 if text is null', () => {
+    const score = getSimilarityScore(null as unknown as string, keywords);
+    expect(score).toBe(0);
+  });
+
+  it('should return 0 if both text and keywords are empty', () => {
+    const score = getSimilarityScore('', []);
     expect(score).toBe(0);
   });
 });
