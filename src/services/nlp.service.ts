@@ -1,10 +1,18 @@
 import { Keyword } from "@prisma/client";
+import redis from '../config/redis';
+import { createHash } from 'crypto';
 
-export function isJobPost(
+export async function isJobPost(
   text: string,
   keywords: Keyword[],
-  threshold: number = 2 
-): boolean {
+  threshold: number = 2
+): Promise<boolean> {
+
+  const hash = createHash('sha1').update(text).digest('hex');
+  const cacheKey = `nlp-result:${hash}`;
+  const cached = await redis.get(cacheKey);
+  if (cached !== null) return cached === 'true';
+
   const normalized = text
     .toLowerCase()
     .normalize("NFKD")
@@ -21,6 +29,10 @@ export function isJobPost(
       matches++;
     }
   }
+  const result = matches >= threshold;
+  await redis.set(cacheKey, result ? 'true' : 'false', { EX: 3600 });
+  return result;
+
 
   return matches >= threshold;
 }
