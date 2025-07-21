@@ -104,8 +104,8 @@ export async function scrapeLinkedInGroupPosts(
         .filter(text => text.length >= minLen);
     }, POST_SELECTORS, MIN_POST_LENGTH);
 
-    await redis.set(cacheKey, JSON.stringify(posts), { EX: 60 });
-    
+    await redis.set(cacheKey, JSON.stringify(posts), { EX: 60 * 60 * 5 });
+
     logger.info(`✅ Found ${posts.length} posts (after filtering)`);
     return posts;
   } catch (err) {
