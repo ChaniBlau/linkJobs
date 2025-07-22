@@ -8,9 +8,13 @@ import { BaseController } from '../base/base.controller';
  * Controller to search job posts based on user keywords and optional filters
  */
 export const searchJobsByKeywordsController = async (req: Request, res: Response) => {
-
-
-  const userId = parseInt(req.query.userId as string);
+  const userIdRaw = req.query.userId;
+  if (!userIdRaw || isNaN(Number(userIdRaw))) {
+    logger.error('❌ Missing or invalid userId in query');
+    return res.status(400).json(BaseController.error("Missing or invalid userId query parameter"));
+  }
+  const userId = parseInt(userIdRaw as string);
+  
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user) {
     logger.warn(`❌ User ID ${userId} not found`);
