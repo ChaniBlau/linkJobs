@@ -2,8 +2,17 @@ import app from './app';
 import logger from './utils/logger';
 import { scheduleTimezoneBasedScraping } from './scheduler/scrapeScheduler';
 import { scrapeWorker } from './queue/scrapeWorker'; // טעינה בלבד – לא להריץ ידנית
+// import { startArchiveOldJobsTask } from './scheduler/archiveOldJobs'; // אם את משתמשת גם בזה
+import { bullBoardRouter } from './dashboard/bullDashboard'; // 👈 דשבורד BullMQ
 
 const PORT = process.env.PORT || 3000;
+
+// ✅ שילוב של הדשבורד תחת כתובת /admin/queues
+app.use('/admin/queues', bullBoardRouter);
+
+
+// // ✅ תזמון ארכוב משרות ישנות (אם קיים)
+// startArchiveOldJobsTask?.(); // רק אם ייבאת אותו
 
 app.listen(PORT, () => {
   if (!process.env.JWT_SECRET) {
@@ -18,3 +27,7 @@ app.listen(PORT, () => {
 
   // 🧠 אין צורך לקרוא ל־scrapeWorker – הייבוא עצמו מפעיל אותו
 });
+
+
+
+

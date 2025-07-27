@@ -17,7 +17,7 @@ export async function scheduleTimezoneBasedScraping() {
 
     // שליפת קבוצות עם שעת יעד ואזור זמן
     const groups = await prisma.group.findMany({
-      where: { isActive: true, scheduledHour: { not: null }, timezone: { not: null } },
+      where: { status: 'ACTIVE', scheduledHour: { not: null }, timezone: { not: null } },
       select: { id: true, scheduledHour: true, timezone: true },
     });
 
