@@ -52,6 +52,9 @@ model Group {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
+  scheduledHour Int?    // לדוג' 8 = 8 בבוקר מקומי
+  timezone      String? // לדוג' 'Asia/Jerusalem' או 'America/New_York'
+
   JobPostings JobPosting[]
   Users       UserGroup[]
 }
