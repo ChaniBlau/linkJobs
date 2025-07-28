@@ -1,10 +1,8 @@
 import cron from 'node-cron';
 import { DateTime } from 'luxon';
-import prisma from '../config/prisma';
-
+import prisma from '../config/prisma'; // או השתמשי ב-PrismaClient ישירות
 import { scrapeQueue } from '../queue/scrapeQueue';
 import logger from '../utils/logger';
-
 /**
  * תזמון דינאמי לפי אזור זמן לכל קבוצה
  */

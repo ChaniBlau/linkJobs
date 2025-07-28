@@ -7,41 +7,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  SUPER_ADMIN
-  ORG_ADMIN
-  RECRUITER
-  VIEWER
-}
-
-enum GroupStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
 model User {
-  id              Int          @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   name            String
-  email           String       @unique
+  email           String        @unique
   hashed_password String
-  role            Role         @default(VIEWER)
-  organizationId  Int?         
-  Organization    Organization? @relation(fields: [organizationId], references: [id])
-
+  role            Role          @default(VIEWER)
+  organizationId  Int?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   Keywords        Keyword[]
   SavedSearches   SavedSearch[]
-  Groups          UserGroup[]     // קשר Many-to-Many לקבוצות
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  Organization    Organization? @relation(fields: [organizationId], references: [id])
+  Groups          UserGroup[]
 }
 
 model Organization {
-  id          Int          @id @default(autoincrement())
-  name        String
-  users       User[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  id        Int      @id @default(autoincrement())
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
 }
 
 model Group {
@@ -51,22 +37,18 @@ model Group {
   status      GroupStatus  @default(ACTIVE)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
-
-  scheduledHour Int?    // לדוג' 8 = 8 בבוקר מקומי
-  timezone      String? // לדוג' 'Asia/Jerusalem' או 'America/New_York'
-
+  scheduledHour Int?     // 0-23, השעה בה יש להריץ
+  timezone      String?  // לדוגמה: "Asia/Jerusalem"
   JobPostings JobPosting[]
   Users       UserGroup[]
 }
 
 model UserGroup {
-  userId  Int
-  groupId Int
-
-  User    User  @relation(fields: [userId], references: [id])
-  Group   Group @relation(fields: [groupId], references: [id])
-
+  userId   Int
+  groupId  Int
   joinedAt DateTime @default(now())
+  Group    Group    @relation(fields: [groupId], references: [id])
+  User     User     @relation(fields: [userId], references: [id])
 
   @@id([userId, groupId])
 }
@@ -81,13 +63,11 @@ model JobPosting {
   postingDate DateTime
   language    String?
   isArchived  Boolean      @default(false)
-
   groupId     Int
-  Group       Group        @relation(fields: [groupId], references: [id])
-  JobKeywords JobKeyword[]
-  
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  JobKeywords JobKeyword[]
+  Group       Group        @relation(fields: [groupId], references: [id])
 }
 
 model Keyword {
@@ -95,11 +75,10 @@ model Keyword {
   word        String
   weight      Int          @default(1)
   userId      Int
-  User        User         @relation(fields: [userId], references: [id])
-  JobKeywords JobKeyword[]
-  
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  JobKeywords JobKeyword[]
+  User        User         @relation(fields: [userId], references: [id])
 
   @@unique([word, userId])
 }
@@ -117,9 +96,21 @@ model SavedSearch {
   id        Int      @id @default(autoincrement())
   userId    Int
   name      String
-  keywords  String[] 
-  daysRange Int  
+  keywords  String[]
+  daysRange Int
   createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id])
+}
 
-  User User @relation(fields: [userId], references: [id])
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  RECRUITER
+  VIEWER
+}
+
+enum GroupStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
 }

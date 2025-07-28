@@ -18,7 +18,6 @@ router.post("/",authenticate, createJobPost);
 // scrape job posts from LinkedIn group and save them to the database
 router.post("/scrape-detect",authenticate, scrapeJobsHandler);
 
-// routes/group.routes.ts
 router.post('/:id/scrape-now', async (req, res) => {
   const groupId = Number(req.params.id);
   await scrapeQueue.add('scrape-group', { groupId });
