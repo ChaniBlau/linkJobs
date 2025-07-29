@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import { Role, PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
 import { BaseController } from '../api/base/base.controller';
+import logger from '../utils/logger'; 
 
 dotenv.config();
 const prisma = new PrismaClient();
@@ -15,6 +16,8 @@ interface JwtPayload {
 }
 
 export const authenticate: RequestHandler = async (req, res, next) => {
+  logger.info("🔒 auth.middleware triggered");
+
   const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
     return res.status(401).json(BaseController.error('Unauthorized', 'Authorization header is missing or invalid'));

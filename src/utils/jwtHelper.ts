@@ -5,7 +5,7 @@ dotenv.config();
 export const generateToken = (payload: {
   id: number;
   role: string;
-  organizationId: number;
+  organizationId: number | null;
 }) => {
   return jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '7d' });
 };

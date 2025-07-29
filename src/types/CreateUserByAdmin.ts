@@ -2,5 +2,5 @@ export type CreateUserByAdminInput = {
   name: string;
   email: string;
   password: string;
-  organizationId: number;
+  organizationId: number | null; 
 };

@@ -10,6 +10,7 @@ import { generateToken } from '../utils/jwtHelper';
 import { RegisterUserInput } from '../types/User';
 import { CreateUserByAdminInput } from '../types/CreateUserByAdmin';
 import { HttpError } from '../errors/HttpError';
+import { number } from 'zod';
 
 export const updateUserRoleService = async (id: number, role: Role) => {
   if (!Object.values(Role).includes(role)) {
@@ -60,7 +61,7 @@ export const registerNewUserService = async (data: RegisterUserInput) => {
     name: data.name,
     email: data.email,
     password: hashed,
-    organizationId: null,
+    organizationId: null
   });
 
   const token = generateToken({
