@@ -1,41 +1,63 @@
-import { RequestHandler } from 'express';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { AuthenticatedRequest } from '../types/AuthenticatedRequest';
 import jwt from 'jsonwebtoken';
-import logger from '../utils/logger';
-export interface AuthenticatedUser {
+import { Role, PrismaClient } from '@prisma/client';
+import dotenv from 'dotenv';
+import { BaseController } from '../api/base/base.controller';
+import logger from '../utils/logger'; 
+
+dotenv.config();
+const prisma = new PrismaClient();
+
+interface JwtPayload {
   id: number;
   role: string;
+  organizationId: number;
 }
 
-export interface AuthenticatedRequest extends Express.Request {
-  user?: AuthenticatedUser;
-}
-
-export const authenticate: RequestHandler = (req, res, next) => {
+export const authenticate: RequestHandler = async (req, res, next) => {
   logger.info("🔒 auth.middleware triggered");
-  const authHeader = req.headers.authorization;
 
+  const authHeader = req.headers.authorization;
   if (!authHeader?.startsWith('Bearer ')) {
-    res.status(401).json({ error: 'Missing or invalid token' });
-    return;
+    return res.status(401).json(BaseController.error('Unauthorized', 'Authorization header is missing or invalid'));
   }
 
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'secret_key') as {
-      userId: number;
-      role: string;
-    };
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+
+    if (!user) {
+      return res.status(401).json(BaseController.error('User not found', 'The user associated with this token does not exist'));
+    }
 
     (req as AuthenticatedRequest).user = {
-      id: decoded.userId,
-      role: decoded.role,
+      id: decoded.id,
+      role: decoded.role as Role,
+      organizationId: decoded.organizationId,
     };
 
     next();
-    return;
-  } catch {
-    res.status(401).json({ error: 'Unauthorized – token invalid or expired' });
-    return;
+  } catch (err) {
+    return res.status(403).json(BaseController.error('Invalid token', 'The provided token is invalid or expired'));
   }
+};
+
+export const requireAdminRole = (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user;
+
+  if (!user || (user.role !== 'ORG_ADMIN' && user.role !== 'SUPER_ADMIN')) {
+    return res.status(403).json(BaseController.error('Access denied', 'You do not have permission to perform this action'));
+  }
+
+  next();
 };
