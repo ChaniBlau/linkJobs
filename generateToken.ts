@@ -9,6 +9,6 @@ export function generateToken(payload: object): string {
 }
 
 
-const token = generateToken({ userId: 1, role: 'ORG_ADMIN' });
+const token = generateToken({ userId: 7, role: 'VIEWER' });
 console.log('Generated Token:', token);
 

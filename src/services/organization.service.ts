@@ -1,9 +1,9 @@
 import * as orgRepo from '../repositories/organization.repository';
-import { sendInviteEmail } from '../utils/emailHelper';
-import { Role } from '@prisma/client';
-import { ForbiddenError, NotFoundError, BadRequestError } from '../utils/errors'
 import logger from '../utils/logger';
+import { sendInviteEmail } from '../utils/emailHelper';
+import { ForbiddenError, NotFoundError, BadRequestError } from '../utils/errors'
 import { publishInviteEmail } from '../queues/producers/email.producer';
+import { Role } from '@prisma/client';
 
 const verifyOrgAdmin = async (orgId: number, userId: number) => {
   const user = await orgRepo.getUserById(userId);
@@ -124,3 +124,49 @@ export const removeUserFromOrganization = async (
 
   logger.info(`[OrgService] User ${targetUserId} removed from organization ${orgId}`);
 };
+
+export const getUsersInOrganization = async (
+  orgId: number,
+  requestedById: number
+) => {
+  logger.info(`[OrgService] Get users requested: orgId=${orgId}, byUser=${requestedById}`);
+
+  const requestingUser = await orgRepo.getUserById(requestedById);
+  
+  if (!requestingUser) {
+    throw new NotFoundError('Requesting user not found');
+  }
+
+  if (requestingUser.role !== Role.SUPER_ADMIN) {
+    if (requestingUser.organizationId !== orgId) {
+      throw new ForbiddenError('You can only view users from your own organization');
+    }
+  }
+
+  const organization = await orgRepo.getOrganizationById(orgId);
+  if (!organization) {
+    throw new NotFoundError('Organization not found');
+  }
+
+  const users = await orgRepo.getUsersByOrganizationId(orgId);
+  
+  const sanitizedUsers = users.map(user => ({
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+    organizationId: user.organizationId,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt
+  }));
+
+  logger.info(`[OrgService] Retrieved ${sanitizedUsers.length} users for org ${orgId}`);
+  
+  return {
+    organizationId: orgId,
+    organizationName: organization.name,
+    users: sanitizedUsers,
+    totalUsers: sanitizedUsers.length
+  };
+};
+

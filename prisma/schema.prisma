@@ -20,6 +20,12 @@ enum GroupStatus {
   PENDING
 }
 
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id              Int          @id @default(autoincrement())
   name            String
@@ -31,6 +37,7 @@ model User {
 
   Keywords        Keyword[]
   SavedSearches   SavedSearch[]
+  joinRequests    JoinRequest[]
   Groups          UserGroup[]     // קשר Many-to-Many לקבוצות
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -42,6 +49,8 @@ model Organization {
   users       User[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  joinRequests    JoinRequest[]
 }
 
 model Group {
@@ -119,4 +128,14 @@ model SavedSearch {
   createdAt DateTime @default(now())
 
   User User @relation(fields: [userId], references: [id])
+}
+
+model JoinRequest {
+  id         Int       @id @default(autoincrement())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     Int
+  organization Organization @relation(fields: [organizationId], references: [id])
+  organizationId Int
+  status     JoinRequestStatus @default(PENDING)
+  createdAt  DateTime @default(now())
 }
