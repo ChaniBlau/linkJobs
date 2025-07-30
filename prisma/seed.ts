@@ -17,6 +17,7 @@ async function main() {
             email: 'yoyohgg@gmail.com',
             hashed_password: hashedPassword,
             role: Role.SUPER_ADMIN,
+
           },
           {
             name: 'Eden Bar',

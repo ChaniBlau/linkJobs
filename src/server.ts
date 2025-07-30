@@ -1,5 +1,5 @@
 import app from './app';
-
+import logger from './utils/logger';
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
@@ -7,5 +7,5 @@ app.listen(PORT, () => {
   console.error('❌ JWT_SECRET is not defined in environment variables!');
   process.exit(1);
   }
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  logger.info(`🚀 Server is running on http://localhost:${PORT}`);
 });
