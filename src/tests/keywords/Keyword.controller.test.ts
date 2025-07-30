@@ -1,8 +1,7 @@
-// src/tests/keywords/Keyword.controller.test.ts
 import * as service from '../../services/keyword.service';
 import { createKeyword, deleteKeyword, getAllKeywords, updateKeyword } from '../../api/keywords/keyword.controller';
 import { BaseController } from '../../api/base/base.controller';
-import { AuthenticatedRequest } from '../../middlewares/auth.middleware';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { Response } from 'express';
 
 jest.mock('../../services/keyword.service');

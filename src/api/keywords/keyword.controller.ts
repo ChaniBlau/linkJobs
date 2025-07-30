@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import * as service from '../../services/keyword.service';
 import logger from '../../utils/logger';
-import { AuthenticatedRequest } from '../../middlewares/auth.middleware';
+import { AuthenticatedRequest } from '../../types/AuthenticatedRequest';
 import { BaseController } from '../base/base.controller';
 
 /**
