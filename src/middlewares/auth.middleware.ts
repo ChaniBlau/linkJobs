@@ -47,7 +47,7 @@ export const authenticate: RequestHandler = async (
     req.user = {
       id: decoded.id,
       role: decoded.role as Role,
-      organizationId: decoded.organizationId?? null,
+      organizationId: decoded.organizationId ?? null,
     };
 
     next();
