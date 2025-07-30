@@ -1,18 +1,13 @@
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import dotenv from 'dotenv';
 dotenv.config();
-export function generateToken(userId: number, role: string): string {
-  const token = jwt.sign(
-    {
-      userId,
-      role,
-    },
-    process.env.JWT_SECRET || 'secret_key', // ודאי שהסוד תואם למה שמוגדר ב־auth.middleware.ts
-    { expiresIn: '10h' } // טוקן שפג תוקפו אחרי שעה
-  );
 
-  return token;
+const JWT_SECRET: Secret = process.env.JWT_SECRET || 'your-secret-key';
+
+export function generateToken(payload: object): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn:7 * 24 * 60 * 60 }); // Token valid for 7 days
 }
 
-const token = generateToken(1, 'ORG_ADMIN');
-console.log('Your token:', token);
+
+const token = generateToken({ userId: 7, role: 'VIEWER' });
+console.log('Generated Token:', token);
