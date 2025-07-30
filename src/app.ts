@@ -3,6 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import groupRoutes from './routes/group.routes';
 import organizationUsersRoutes from './routes/organizationUsers.routes';
 import authRoutes from './routes/auth.routes';
 import jobRoutes from '../src/routes/job.routes';
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use('/api/groups', groupRoutes);
 app.use('/api/organization-users', organizationUsersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
