@@ -3,6 +3,8 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import keywordRoutes from './routes/keyword.routes';
+import { authenticate } from './middlewares/auth.middleware';
 import groupRoutes from './routes/group.routes';
 import organizationUsersRoutes from './routes/organizationUsers.routes';
 import authRoutes from './routes/auth.routes';
@@ -25,6 +27,9 @@ app.use('/api/groups', groupRoutes);
 app.use('/api/organization-users', organizationUsersRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/jobs', jobRoutes);
+
+app.use('/api/keywords',authenticate, keywordRoutes);
+
 
 app.get('/health', (req, res) => {
   res.send('Server is running');
