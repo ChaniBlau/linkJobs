@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { scrapeQueue } from "../queue/scrapeQueue";
+import { scrapeQueue } from "../queues/scrapeQueue";
 import {
   detectJobPosts,
   createJobPost,

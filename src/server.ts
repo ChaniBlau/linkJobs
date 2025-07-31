@@ -1,8 +1,9 @@
 import app from './app';
 import logger from './utils/logger';
 import { scheduleTimezoneBasedScraping } from './scheduler/scrapeScheduler';
-import { scrapeWorker } from './queue/scrapeWorker';
 import { bullBoardRouter } from './dashboard/bullDashboard';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 app.use('/admin/queues', bullBoardRouter);
@@ -15,7 +16,7 @@ app.listen(PORT, () => {
 
   logger.info(`🚀 Server is running on http://localhost:${PORT}`);
 
-  scheduleTimezoneBasedScraping();
+  scheduleTimezoneBasedScraping(); 
 
 });
 
