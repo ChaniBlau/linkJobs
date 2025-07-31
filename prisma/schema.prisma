@@ -7,6 +7,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  RECRUITER
+  VIEWER
+}
+
+enum GroupStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 model User {
   id              Int           @id @default(autoincrement())
   name            String
@@ -20,27 +39,29 @@ model User {
   SavedSearches   SavedSearch[]
   Organization    Organization? @relation(fields: [organizationId], references: [id])
   Groups          UserGroup[]
+  joinRequests    JoinRequest[]
 }
 
 model Organization {
-  id        Int      @id @default(autoincrement())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  users     User[]
+  id             Int           @id @default(autoincrement())
+  name           String
+  users          User[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  joinRequests   JoinRequest[]
 }
 
 model Group {
-  id          Int          @id @default(autoincrement())
-  name        String
-  linkedinUrl String       @unique
-  status      GroupStatus  @default(ACTIVE)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  scheduledHour Int?     // 0-23, השעה בה יש להריץ
-  timezone      String?  // לדוגמה: "Asia/Jerusalem"
-  JobPostings JobPosting[]
-  Users       UserGroup[]
+  id            Int          @id @default(autoincrement())
+  name          String
+  linkedinUrl   String       @unique
+  status        GroupStatus  @default(ACTIVE)
+  scheduledHour Int?         // 0-23, השעה בה יש להריץ
+  timezone      String?      // לדוגמה: "Asia/Jerusalem"
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  JobPostings   JobPosting[]
+  Users         UserGroup[]
 }
 
 model UserGroup {
@@ -102,15 +123,12 @@ model SavedSearch {
   User      User     @relation(fields: [userId], references: [id])
 }
 
-enum Role {
-  SUPER_ADMIN
-  ORG_ADMIN
-  RECRUITER
-  VIEWER
-}
-
-enum GroupStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
+model JoinRequest {
+  id              Int                 @id @default(autoincrement())
+  user            User               @relation(fields: [userId], references: [id])
+  userId          Int
+  organization    Organization       @relation(fields: [organizationId], references: [id])
+  organizationId  Int
+  status          JoinRequestStatus  @default(PENDING)
+  createdAt       DateTime           @default(now())
 }
