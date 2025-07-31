@@ -27,52 +27,49 @@ enum JoinRequestStatus {
 }
 
 model User {
-  id              Int          @id @default(autoincrement())
+  id              Int           @id @default(autoincrement())
   name            String
-  email           String       @unique
+  email           String        @unique
   hashed_password String
-  role            Role         @default(VIEWER)
-  organizationId  Int?         
-  Organization    Organization? @relation(fields: [organizationId], references: [id])
-
+  role            Role          @default(VIEWER)
+  organizationId  Int?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
   Keywords        Keyword[]
   SavedSearches   SavedSearch[]
+  Organization    Organization? @relation(fields: [organizationId], references: [id])
+  Groups          UserGroup[]
   joinRequests    JoinRequest[]
-  Groups          UserGroup[]     // קשר Many-to-Many לקבוצות
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
 }
 
 model Organization {
-  id          Int          @id @default(autoincrement())
-  name        String
-  users       User[]
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  joinRequests    JoinRequest[]
+  id             Int           @id @default(autoincrement())
+  name           String
+  users          User[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  joinRequests   JoinRequest[]
 }
 
 model Group {
-  id          Int          @id @default(autoincrement())
-  name        String
-  linkedinUrl String       @unique
-  status      GroupStatus  @default(ACTIVE)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-
-  JobPostings JobPosting[]
-  Users       UserGroup[]
+  id            Int          @id @default(autoincrement())
+  name          String
+  linkedinUrl   String       @unique
+  status        GroupStatus  @default(ACTIVE)
+  scheduledHour Int?         // 0-23, השעה בה יש להריץ
+  timezone      String?      // לדוגמה: "Asia/Jerusalem"
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  JobPostings   JobPosting[]
+  Users         UserGroup[]
 }
 
 model UserGroup {
-  userId  Int
-  groupId Int
-
-  User    User  @relation(fields: [userId], references: [id])
-  Group   Group @relation(fields: [groupId], references: [id])
-
+  userId   Int
+  groupId  Int
   joinedAt DateTime @default(now())
+  Group    Group    @relation(fields: [groupId], references: [id])
+  User     User     @relation(fields: [userId], references: [id])
 
   @@id([userId, groupId])
 }
@@ -87,13 +84,11 @@ model JobPosting {
   postingDate DateTime
   language    String?
   isArchived  Boolean      @default(false)
-
   groupId     Int
-  Group       Group        @relation(fields: [groupId], references: [id])
-  JobKeywords JobKeyword[]
-  
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  JobKeywords JobKeyword[]
+  Group       Group        @relation(fields: [groupId], references: [id])
 }
 
 model Keyword {
@@ -101,11 +96,10 @@ model Keyword {
   word        String
   weight      Int          @default(1)
   userId      Int
-  User        User         @relation(fields: [userId], references: [id])
-  JobKeywords JobKeyword[]
-  
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  JobKeywords JobKeyword[]
+  User        User         @relation(fields: [userId], references: [id])
 
   @@unique([word, userId])
 }
@@ -123,19 +117,18 @@ model SavedSearch {
   id        Int      @id @default(autoincrement())
   userId    Int
   name      String
-  keywords  String[] 
-  daysRange Int  
+  keywords  String[]
+  daysRange Int
   createdAt DateTime @default(now())
-
-  User User @relation(fields: [userId], references: [id])
+  User      User     @relation(fields: [userId], references: [id])
 }
 
 model JoinRequest {
-  id         Int       @id @default(autoincrement())
-  user       User      @relation(fields: [userId], references: [id])
-  userId     Int
-  organization Organization @relation(fields: [organizationId], references: [id])
-  organizationId Int
-  status     JoinRequestStatus @default(PENDING)
-  createdAt  DateTime @default(now())
+  id              Int                 @id @default(autoincrement())
+  user            User               @relation(fields: [userId], references: [id])
+  userId          Int
+  organization    Organization       @relation(fields: [organizationId], references: [id])
+  organizationId  Int
+  status          JoinRequestStatus  @default(PENDING)
+  createdAt       DateTime           @default(now())
 }

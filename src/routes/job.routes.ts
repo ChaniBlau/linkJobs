@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { scrapeQueue } from "../queue/scrapeQueue";
 import {
   detectJobPosts,
   createJobPost,
@@ -17,6 +18,12 @@ router.post("/",authenticate, createJobPost);
 
 // scrape job posts from LinkedIn group and save them to the database
 router.post("/scrape-detect",authenticate, scrapeJobsHandler);
+
+router.post('/:id/scrape-now', async (req, res) => {
+  const groupId = Number(req.params.id);
+  await scrapeQueue.add('scrape-group', { groupId });
+  res.status(200).json({ message: `Scrape job added for group ${groupId}` });
+});
 
 
 router.get('/search',authenticate, searchJobsByKeywordsController);
