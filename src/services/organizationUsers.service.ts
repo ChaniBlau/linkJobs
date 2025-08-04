@@ -10,7 +10,7 @@ import { generateToken } from '../utils/jwtHelper';
 import { RegisterUserInput } from '../types/User';
 import { CreateUserByAdminInput } from '../types/CreateUserByAdmin';
 import { HttpError } from '../errors/HttpError';
-import { number } from 'zod';
+import { licenseService } from './license.service';
 
 export const updateUserRoleService = async (id: number, role: Role) => {
   if (!Object.values(Role).includes(role)) {
@@ -31,6 +31,17 @@ export const createUserByAdminService = async (data: CreateUserByAdminInput) => 
     throw new Error('User with this email already exists');
   }
 
+  const isExpired = await licenseService.isLicenseExpired(data.organizationId ? data.organizationId : 0);
+  const hasSeats = await licenseService.hasAvailableSeats(data.organizationId ? data.organizationId : 0);
+
+  if (isExpired) {
+    throw new HttpError('Organization license has expired', 403);
+  }
+
+  if (!hasSeats) {
+    throw new HttpError('No available seats in organization license', 403);
+  }
+
   const hashed = await hashPassword(data.password);
 
   const user = await createUser({
@@ -39,6 +50,8 @@ export const createUserByAdminService = async (data: CreateUserByAdminInput) => 
     password: hashed,
     organizationId: data.organizationId,
   });
+
+  await licenseService.incrementSeatsUsed(data.organizationId? data.organizationId : 0);
 
   const token = generateToken({
     id: user.id,
