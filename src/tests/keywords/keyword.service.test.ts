@@ -1,4 +1,3 @@
-// src/tests/keywords/Keyword.service.test.ts
 import * as service from '../../services/keyword.service';
 import * as repo from '../../repositories/keyword.repository';
 import { Keyword } from '@prisma/client';
@@ -16,6 +15,7 @@ const mockKeyword: Keyword = {
 };
 
 describe('Keyword Service', () => {
+  beforeEach(() => jest.clearAllMocks());
   afterEach(() => jest.clearAllMocks());
 
   describe('getKeywords', () => {
@@ -53,6 +53,7 @@ describe('Keyword Service', () => {
 
       const result = await service.updateKeyword(10, 1, 8);
       expect(result.weight).toBe(8);
+      expect(mockedRepo.updateKeyword).toHaveBeenCalledWith(1, 8);
     });
 
     it('should throw error if keyword not owned', async () => {
@@ -75,6 +76,7 @@ describe('Keyword Service', () => {
 
       const result = await service.deleteKeyword(10, 1);
       expect(result).toEqual(mockKeyword);
+      expect(mockedRepo.deleteKeyword).toHaveBeenCalledWith(1);
     });
 
     it('should throw error if keyword not owned', async () => {

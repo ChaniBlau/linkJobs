@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const payload = {
-  id: 1,
+  id: 2,
   role: 'ORG_ADMIN',
 };
 

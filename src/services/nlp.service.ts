@@ -24,7 +24,13 @@ export async function isJobPost(
   let matches = 0;
 
   for (const keyword of keywords) {
-    const keywordText = keyword.word.toLowerCase().trim();
+    const keywordText = keyword.word
+      .toLowerCase()
+      .normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9\u0590-\u05FF\s]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
     if (normalized.includes(keywordText)) {
       matches++;
     }
@@ -32,7 +38,4 @@ export async function isJobPost(
   const result = matches >= threshold;
   await redis.set(cacheKey, result ? 'true' : 'false', { EX: 3600 });
   return result;
-
-
-  return matches >= threshold;
 }
