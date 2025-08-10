@@ -1,21 +1,25 @@
-import express from 'express';
-import helmet from 'helmet';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
+import app from './app';
+import logger from './utils/logger';
+import { scheduleTimezoneBasedScraping } from './scheduler/scrapeScheduler';
+import { bullBoardRouter } from './dashboard/bullDashboard';
+import dotenv from 'dotenv';
+dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 3000;
-
-app.use(helmet());
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
-
-app.get('/health', (req, res) => {
-    res.send('Server is running');
-});
+app.use('/admin/queues', bullBoardRouter);
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+  if (!process.env.JWT_SECRET) {
+    console.error('❌ JWT_SECRET is not defined in environment variables!');
+    process.exit(1);
+  }
+
+  logger.info(`🚀 Server is running on http://localhost:${PORT}`);
+
+  scheduleTimezoneBasedScraping(); 
+
 });
+
+
+
+
