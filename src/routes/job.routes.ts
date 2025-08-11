@@ -1,23 +1,23 @@
-import { Router } from "express";
+import { Router } from 'express';
+import { getAllJobs } from '../api/jobs/jobs.controller';
+import { authenticate } from '../middlewares/auth.middleware';
 import { scrapeQueue } from "../queues/scrapeQueue";
 import {
   detectJobPosts,
   createJobPost,
   scrapeJobsHandler
 } from "../api/jobs/job.controller";
-import { authenticate } from '../middlewares/auth.middleware';
 import { searchJobsByKeywordsController } from "../api/fuzzyMatch/fuzzy-match-controller";
 
 const router = Router();
 
-// detect job posts from according to the provided keywords - for testing purposes
-router.post("/detect",authenticate, detectJobPosts);
+// מהצד הראשון - קריאת כל המשרות
+router.get('/', authenticate, getAllJobs);
 
-// create a new job post by manually entering details - for testing purposes
-router.post("/",authenticate, createJobPost);
-
-// scrape job posts from LinkedIn group and save them to the database
-router.post("/scrape-detect",authenticate, scrapeJobsHandler);
+// מהצד השני - קריאת נתיבים חדשים:
+router.post("/detect", authenticate, detectJobPosts);
+router.post("/", authenticate, createJobPost);
+router.post("/scrape-detect", authenticate, scrapeJobsHandler);
 
 router.post('/:id/scrape-now', async (req, res) => {
   const groupId = Number(req.params.id);
@@ -25,7 +25,6 @@ router.post('/:id/scrape-now', async (req, res) => {
   res.status(200).json({ message: `Scrape job added for group ${groupId}` });
 });
 
-
-router.get('/search',authenticate, searchJobsByKeywordsController);
+router.get('/search', authenticate, searchJobsByKeywordsController);
 
 export default router;
