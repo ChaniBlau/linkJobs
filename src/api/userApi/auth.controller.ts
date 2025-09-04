@@ -27,7 +27,7 @@ export const registerNewUser = async (req: Request, res: Response) => {
         .json(BaseController.error(err.message));
     }
     if (err instanceof ZodError) {
-      return res.status(400).json(BaseController.error('Validation failed', err.errors));
+      return res.status(400).json(BaseController.error('Validation failed', err.issues));
     }
     return res
       .status(500)

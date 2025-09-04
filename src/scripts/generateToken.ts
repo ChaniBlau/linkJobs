@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 dotenv.config();
 
 const payload = {
-  id: 2,
-  role: 'ORG_ADMIN',
+  id: 3,
+  role: 'RECRUITER',
 };
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -15,6 +15,6 @@ if (!JWT_SECRET) {
   process.exit(1);
 }
 
-const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '9h' });
+const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '9d' });
 
 console.log("🔑 Generated JWT:\n", token);

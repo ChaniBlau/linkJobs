@@ -1,31 +1,471 @@
-2025-06-16 15:18:43 [INFO]: 🚀 Server is running on port 3000
-2025-06-16 16:09:06 [INFO]: 🚀 Server is running on port 3000
-2025-06-16 16:11:01 [INFO]: 🚀 Server is running on port 3000
-2025-06-16 16:11:16 [INFO]: Attempt to login with email: test@example.com
-2025-06-16 16:11:16 [INFO]: Attempting login for email: test@example.com
-2025-06-16 16:11:16 [INFO]: Login successful for user: test@example.com
-2025-06-16 16:11:16 [INFO]: Login successful for email: test@example.com
-2025-06-16 16:22:34 [INFO]: Attempt to login with email: test@example.com
-2025-06-16 16:22:34 [INFO]: Attempting login for email: test@example.com
-2025-06-16 16:22:34 [INFO]: Login successful for user: test@example.com
-2025-06-16 16:22:34 [INFO]: Login successful for email: test@example.com
-2025-06-17 11:37:14 [INFO]: 🚀 Server is running on port 3000
-2025-06-17 11:37:46 [INFO]: Attempt to login with email: test@example.com
-2025-06-17 11:37:46 [INFO]: Attempting login for email: test@example.com
-2025-06-17 11:37:46 [INFO]: Login successful for user: test@example.com
-2025-06-17 11:37:46 [INFO]: Login successful for email: test@example.com
-2025-06-19 12:15:41 [INFO]: 🚀 Server is running on port 3000
-2025-06-19 14:02:01 [INFO]: 🚀 Server is running on port 3000
-2025-06-19 14:48:32 [INFO]: Attempt to login with email: test@example.com
-2025-06-19 14:48:32 [INFO]: Attempting login for email: test@example.com
-2025-06-19 14:48:32 [INFO]: Login successful for user: test@example.com
-2025-06-19 14:48:32 [INFO]: Login successful for email: test@example.com
-2025-06-19 15:53:06 [INFO]: Attempt to login with email: undefined
-2025-06-19 15:53:06 [INFO]: Attempting login for email: undefined
-2025-06-19 15:53:06 [WARN]: Login failed - user not found: undefined
-2025-06-19 15:53:06 [ERROR]: Login failed for email: undefined - Reason: User not found
-2025-06-19 16:01:24 [INFO]: 🚀 Server is running on port 3000
-2025-06-19 16:07:58 [INFO]: 🚀 Server is running on port 3000
-2025-06-21 22:58:54 [INFO]: 🚀 Server is running on port 3000
-2025-06-21 23:22:12 [INFO]: 🚀 Server is running on port 3000
-2025-06-21 23:58:45 [INFO]: 🚀 Server is running on port 3000
+2025-09-03 03:00:00 [INFO]: 🕐 Checking which groups to schedule based on timezone
+2025-09-03 03:30:00 [INFO]: 🕐 Checking which groups to schedule based on timezone
+2025-09-04 15:06:00 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 15:06:07 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:06:07 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:06:07 [INFO]: ✅ Token verified
+2025-09-04 15:06:07 [INFO]: Organization access check completed
+2025-09-04 15:06:07 [INFO]: Comparing companies
+2025-09-04 15:06:07 [INFO]: Cache miss - fetching from database
+2025-09-04 15:06:07 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:06:07 [INFO]: Company comparison completed
+2025-09-04 15:06:47 [INFO]: Request - Method: POST, URL: /api/auth/login
+2025-09-04 15:06:47 [INFO]: Attempt to login with email: chaim@gmail.com
+2025-09-04 15:06:47 [INFO]: Attempting login for email: chaim@gmail.com
+2025-09-04 15:06:47 [INFO]: Login successful for user: chaim@gmail.com
+2025-09-04 15:06:47 [INFO]: Login successful for email: chaim@gmail.com
+2025-09-04 15:06:58 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=day&startDate=2024-01-01&endDate=2024-01-31
+2025-09-04 15:06:58 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:06:58 [INFO]: ✅ Token verified
+2025-09-04 15:06:58 [INFO]: Organization access check completed
+2025-09-04 15:06:58 [INFO]: Generating company growth report
+2025-09-04 15:06:58 [INFO]: Fetching company growth from database
+2025-09-04 15:06:58 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:06:58 [INFO]: Company growth report generated
+2025-09-04 15:07:02 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google&interval=month
+2025-09-04 15:07:02 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:02 [INFO]: ✅ Token verified
+2025-09-04 15:07:02 [INFO]: Organization access check completed
+2025-09-04 15:07:02 [INFO]: Generating company growth report
+2025-09-04 15:07:02 [INFO]: Fetching company growth from database
+2025-09-04 15:07:02 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:07:02 [INFO]: Company growth report generated
+2025-09-04 15:07:06 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=invalid-date
+2025-09-04 15:07:06 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:06 [INFO]: ✅ Token verified
+2025-09-04 15:07:06 [INFO]: Organization access check completed
+2025-09-04 15:07:10 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2024-12-31&limit=5
+2025-09-04 15:07:10 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:10 [INFO]: ✅ Token verified
+2025-09-04 15:07:10 [INFO]: Organization access check completed
+2025-09-04 15:07:10 [INFO]: Generating competition report
+2025-09-04 15:07:10 [INFO]: Cache miss - fetching from database
+2025-09-04 15:07:10 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:07:10 [INFO]: Competition report generated
+2025-09-04 15:07:14 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 15:07:14 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:14 [INFO]: ✅ Token verified
+2025-09-04 15:07:14 [INFO]: Organization access check completed
+2025-09-04 15:07:14 [INFO]: Generating competition report
+2025-09-04 15:07:14 [INFO]: Cache miss - fetching from database
+2025-09-04 15:07:14 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:07:14 [INFO]: Competition report generated
+2025-09-04 15:07:21 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:07:21 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:21 [INFO]: ✅ Token verified
+2025-09-04 15:07:21 [INFO]: Organization access check completed
+2025-09-04 15:07:21 [INFO]: Comparing companies
+2025-09-04 15:07:21 [INFO]: Cache miss - fetching from database
+2025-09-04 15:07:21 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:07:21 [INFO]: Company comparison completed
+2025-09-04 15:07:24 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:07:24 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:24 [INFO]: ✅ Token verified
+2025-09-04 15:07:25 [INFO]: Organization access check completed
+2025-09-04 15:07:32 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google&interval=month
+2025-09-04 15:07:32 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:32 [INFO]: ✅ Token verified
+2025-09-04 15:07:32 [INFO]: Organization access check completed
+2025-09-04 15:07:32 [INFO]: Generating company growth report
+2025-09-04 15:07:32 [INFO]: Fetching company growth from database
+2025-09-04 15:07:32 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:07:32 [INFO]: Company growth report generated
+2025-09-04 15:07:36 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=invalid-date
+2025-09-04 15:07:36 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:36 [INFO]: ✅ Token verified
+2025-09-04 15:07:36 [INFO]: Organization access check completed
+2025-09-04 15:07:39 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2024-12-31&limit=5
+2025-09-04 15:07:39 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:39 [INFO]: ✅ Token verified
+2025-09-04 15:07:39 [INFO]: Organization access check completed
+2025-09-04 15:07:39 [INFO]: Generating competition report
+2025-09-04 15:07:39 [INFO]: Cache miss - fetching from database
+2025-09-04 15:07:39 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:07:39 [INFO]: Competition report generated
+2025-09-04 15:07:41 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 15:07:41 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:07:41 [INFO]: ✅ Token verified
+2025-09-04 15:07:41 [INFO]: Organization access check completed
+2025-09-04 15:07:41 [INFO]: Generating competition report
+2025-09-04 15:07:41 [INFO]: Cache miss - fetching from database
+2025-09-04 15:07:41 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:07:41 [INFO]: Competition report generated
+2025-09-04 15:08:07 [INFO]: Request - Method: POST, URL: /api/auth/login
+2025-09-04 15:08:07 [INFO]: Attempt to login with email: user1@example.com
+2025-09-04 15:08:07 [INFO]: Attempting login for email: user1@example.com
+2025-09-04 15:08:07 [INFO]: Login successful for user: user1@example.com
+2025-09-04 15:08:07 [INFO]: Login successful for email: user1@example.com
+2025-09-04 15:08:12 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 15:08:12 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:12 [INFO]: ✅ Token verified
+2025-09-04 15:08:12 [INFO]: Organization access check completed
+2025-09-04 15:08:12 [INFO]: Generating competition report
+2025-09-04 15:08:12 [INFO]: Cache miss - fetching from database
+2025-09-04 15:08:12 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:08:12 [INFO]: Competition report generated
+2025-09-04 15:08:21 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2024-12-31&limit=5
+2025-09-04 15:08:21 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:21 [INFO]: ✅ Token verified
+2025-09-04 15:08:21 [INFO]: Organization access check completed
+2025-09-04 15:08:21 [INFO]: Generating competition report
+2025-09-04 15:08:21 [INFO]: Cache miss - fetching from database
+2025-09-04 15:08:21 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:08:21 [INFO]: Competition report generated
+2025-09-04 15:08:31 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google&interval=month
+2025-09-04 15:08:31 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:31 [INFO]: ✅ Token verified
+2025-09-04 15:08:31 [INFO]: Organization access check completed
+2025-09-04 15:08:31 [INFO]: Generating company growth report
+2025-09-04 15:08:31 [INFO]: Fetching company growth from database
+2025-09-04 15:08:31 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:08:31 [INFO]: Company growth report generated
+2025-09-04 15:08:35 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=day&startDate=2024-01-01&endDate=2024-01-31
+2025-09-04 15:08:35 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:35 [INFO]: ✅ Token verified
+2025-09-04 15:08:35 [INFO]: Organization access check completed
+2025-09-04 15:08:35 [INFO]: Generating company growth report
+2025-09-04 15:08:35 [INFO]: Fetching company growth from database
+2025-09-04 15:08:35 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:08:35 [INFO]: Company growth report generated
+2025-09-04 15:08:41 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:08:41 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:41 [INFO]: ✅ Token verified
+2025-09-04 15:08:41 [INFO]: Organization access check completed
+2025-09-04 15:08:41 [INFO]: Comparing companies
+2025-09-04 15:08:41 [INFO]: Cache miss - fetching from database
+2025-09-04 15:08:41 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:08:41 [INFO]: Company comparison completed
+2025-09-04 15:08:44 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:08:44 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:44 [INFO]: ✅ Token verified
+2025-09-04 15:08:44 [INFO]: Organization access check completed
+2025-09-04 15:08:47 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 15:08:47 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:08:47 [WARN]: ⚠️ Missing or invalid token
+2025-09-04 15:19:32 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 15:19:32 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:19:32 [INFO]: ✅ Token verified
+2025-09-04 15:19:32 [INFO]: Organization access check completed
+2025-09-04 15:19:32 [INFO]: Generating competition report
+2025-09-04 15:19:32 [INFO]: Cache miss - fetching from database
+2025-09-04 15:19:32 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:19:32 [INFO]: Competition report generated
+2025-09-04 15:19:41 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2024-12-31&limit=5
+2025-09-04 15:19:41 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:19:41 [INFO]: ✅ Token verified
+2025-09-04 15:19:41 [INFO]: Organization access check completed
+2025-09-04 15:19:41 [INFO]: Generating competition report
+2025-09-04 15:19:41 [INFO]: Cache miss - fetching from database
+2025-09-04 15:19:41 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:19:41 [INFO]: Competition report generated
+2025-09-04 15:19:55 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2025-12-31&limit=5
+2025-09-04 15:19:55 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:19:55 [INFO]: ✅ Token verified
+2025-09-04 15:19:55 [INFO]: Organization access check completed
+2025-09-04 15:19:55 [INFO]: Generating competition report
+2025-09-04 15:19:55 [INFO]: Cache miss - fetching from database
+2025-09-04 15:19:55 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:19:55 [INFO]: Competition report generated
+2025-09-04 15:20:00 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=invalid-date
+2025-09-04 15:20:00 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:20:00 [INFO]: ✅ Token verified
+2025-09-04 15:20:00 [INFO]: Organization access check completed
+2025-09-04 15:21:21 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google
+2025-09-04 15:21:21 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:21:21 [INFO]: ✅ Token verified
+2025-09-04 15:21:21 [INFO]: Organization access check completed
+2025-09-04 15:21:21 [INFO]: Generating company growth report
+2025-09-04 15:21:21 [INFO]: Fetching company growth from database
+2025-09-04 15:21:21 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:21:21 [INFO]: Company growth report generated
+2025-09-04 15:23:03 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=month
+2025-09-04 15:23:03 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:23:03 [INFO]: ✅ Token verified
+2025-09-04 15:23:03 [INFO]: Organization access check completed
+2025-09-04 15:23:03 [INFO]: Generating company growth report
+2025-09-04 15:23:03 [INFO]: Fetching company growth from database
+2025-09-04 15:23:03 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:23:03 [INFO]: Company growth report generated
+2025-09-04 15:23:27 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=month
+2025-09-04 15:23:27 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:23:27 [INFO]: ✅ Token verified
+2025-09-04 15:23:27 [INFO]: Organization access check completed
+2025-09-04 15:23:27 [INFO]: Generating company growth report
+2025-09-04 15:23:27 [INFO]: Fetching company growth from database
+2025-09-04 15:23:27 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:23:27 [INFO]: Company growth report generated
+2025-09-04 15:24:10 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 15:24:10 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:24:10 [INFO]: ✅ Token verified
+2025-09-04 15:24:10 [INFO]: Organization access check completed
+2025-09-04 15:24:10 [INFO]: Generating company growth report
+2025-09-04 15:24:10 [INFO]: Fetching company growth from database
+2025-09-04 15:24:10 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:24:10 [INFO]: Company growth report generated
+2025-09-04 15:27:00 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 15:27:17 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 15:27:24 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 15:27:24 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:27:24 [INFO]: ✅ Token verified
+2025-09-04 15:27:24 [INFO]: Organization access check completed
+2025-09-04 15:27:24 [INFO]: Generating company growth report
+2025-09-04 15:27:24 [INFO]: Fetching company growth from database
+2025-09-04 15:27:24 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:27:24 [INFO]: Company growth report generated
+2025-09-04 15:29:19 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 15:29:21 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 15:29:21 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:29:21 [INFO]: ✅ Token verified
+2025-09-04 15:29:21 [INFO]: Organization access check completed
+2025-09-04 15:29:21 [INFO]: Generating company growth report
+2025-09-04 15:29:21 [INFO]: Fetching company growth from database
+2025-09-04 15:29:21 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:29:21 [INFO]: Company growth report generated
+2025-09-04 15:30:00 [INFO]: 🕐 Checking which groups to schedule based on timezone
+2025-09-04 15:33:16 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 15:33:22 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 15:33:22 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:33:22 [INFO]: ✅ Token verified
+2025-09-04 15:33:22 [INFO]: Organization access check completed
+2025-09-04 15:33:22 [INFO]: Generating company growth report
+2025-09-04 15:33:22 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 15:33:22 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:33:22 [INFO]: Company growth report generated
+2025-09-04 15:33:26 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 15:33:26 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:33:26 [INFO]: ✅ Token verified
+2025-09-04 15:33:26 [INFO]: Organization access check completed
+2025-09-04 15:33:26 [INFO]: Generating company growth report
+2025-09-04 15:33:26 [INFO]: Cache hit for company growth
+2025-09-04 15:33:26 [INFO]: Company growth report generated
+2025-09-04 15:33:35 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=month
+2025-09-04 15:33:35 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:33:35 [INFO]: ✅ Token verified
+2025-09-04 15:33:35 [INFO]: Organization access check completed
+2025-09-04 15:33:35 [INFO]: Generating company growth report
+2025-09-04 15:33:35 [INFO]: Cache hit for company growth
+2025-09-04 15:33:35 [INFO]: Company growth report generated
+2025-09-04 15:41:20 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=month
+2025-09-04 15:41:20 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:41:20 [INFO]: ✅ Token verified
+2025-09-04 15:41:20 [INFO]: Organization access check completed
+2025-09-04 15:41:20 [INFO]: Generating company growth report
+2025-09-04 15:41:20 [INFO]: Cache hit for company growth
+2025-09-04 15:41:20 [INFO]: Company growth report generated
+2025-09-04 15:41:28 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google&interval=month
+2025-09-04 15:41:28 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:41:28 [INFO]: ✅ Token verified
+2025-09-04 15:41:28 [INFO]: Organization access check completed
+2025-09-04 15:41:28 [INFO]: Generating company growth report
+2025-09-04 15:41:28 [INFO]: Cache hit for company growth
+2025-09-04 15:41:28 [INFO]: Company growth report generated
+2025-09-04 15:42:31 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google&interval=day
+2025-09-04 15:42:31 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:42:31 [INFO]: ✅ Token verified
+2025-09-04 15:42:31 [INFO]: Organization access check completed
+2025-09-04 15:42:31 [INFO]: Generating company growth report
+2025-09-04 15:42:31 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 15:42:31 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:42:31 [INFO]: Company growth report generated
+2025-09-04 15:42:40 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google
+2025-09-04 15:42:40 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:42:40 [INFO]: ✅ Token verified
+2025-09-04 15:42:40 [INFO]: Organization access check completed
+2025-09-04 15:42:40 [INFO]: Generating company growth report
+2025-09-04 15:42:40 [INFO]: Cache hit for company growth
+2025-09-04 15:42:40 [INFO]: Company growth report generated
+2025-09-04 15:42:52 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=google
+2025-09-04 15:42:52 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:42:52 [INFO]: ✅ Token verified
+2025-09-04 15:42:52 [INFO]: Organization access check completed
+2025-09-04 15:42:52 [INFO]: Generating company growth report
+2025-09-04 15:42:52 [INFO]: Cache hit for company growth
+2025-09-04 15:42:52 [INFO]: Company growth report generated
+2025-09-04 15:42:57 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=day&startDate=2024-01-01&endDate=2024-01-31
+2025-09-04 15:42:57 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:42:57 [INFO]: ✅ Token verified
+2025-09-04 15:42:57 [INFO]: Organization access check completed
+2025-09-04 15:42:57 [INFO]: Generating company growth report
+2025-09-04 15:42:57 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 15:42:57 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:42:57 [INFO]: Company growth report generated
+2025-09-04 15:43:21 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=day&startDate=2024-01-01&endDate=2025-09-31
+2025-09-04 15:43:21 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:43:21 [INFO]: ✅ Token verified
+2025-09-04 15:43:21 [INFO]: Organization access check completed
+2025-09-04 15:43:21 [INFO]: Generating company growth report
+2025-09-04 15:43:21 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 15:43:21 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:43:21 [INFO]: Company growth report generated
+2025-09-04 15:43:32 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google&interval=month&startDate=2024-01-01&endDate=2025-09-31
+2025-09-04 15:43:32 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:43:32 [INFO]: ✅ Token verified
+2025-09-04 15:43:32 [INFO]: Organization access check completed
+2025-09-04 15:43:32 [INFO]: Generating company growth report
+2025-09-04 15:43:32 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 15:43:32 [INFO]: Successfully fetched and cached company growth
+2025-09-04 15:43:32 [INFO]: Company growth report generated
+2025-09-04 15:43:43 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?interval=month
+2025-09-04 15:43:43 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:43:43 [INFO]: ✅ Token verified
+2025-09-04 15:43:43 [INFO]: Organization access check completed
+2025-09-04 15:43:49 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:43:49 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:43:49 [INFO]: ✅ Token verified
+2025-09-04 15:43:49 [INFO]: Organization access check completed
+2025-09-04 15:43:49 [INFO]: Comparing companies
+2025-09-04 15:43:49 [INFO]: Cache miss - fetching job count from database
+2025-09-04 15:43:49 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:43:49 [INFO]: Company comparison completed
+2025-09-04 15:44:12 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 15:44:12 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 15:44:12 [INFO]: ✅ Token verified
+2025-09-04 15:44:12 [INFO]: Organization access check completed
+2025-09-04 15:44:12 [INFO]: Comparing companies
+2025-09-04 15:44:12 [INFO]: Cache miss - fetching job count from database
+2025-09-04 15:44:12 [INFO]: Successfully fetched and cached job count
+2025-09-04 15:44:12 [INFO]: Company comparison completed
+2025-09-04 16:00:00 [INFO]: 🕐 Checking which groups to schedule based on timezone
+2025-09-04 16:08:20 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:10:11 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Microsoft
+2025-09-04 16:10:11 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:10:11 [INFO]: ✅ Token verified
+2025-09-04 16:10:11 [INFO]: Organization access check completed
+2025-09-04 16:10:11 [INFO]: Generating company growth report
+2025-09-04 16:10:11 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 16:10:11 [INFO]: Successfully fetched and cached company growth
+2025-09-04 16:10:11 [INFO]: Company growth report generated
+2025-09-04 16:12:37 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:12:44 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:13:23 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:13:27 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Microsoft
+2025-09-04 16:13:27 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:13:27 [INFO]: ✅ Token verified
+2025-09-04 16:13:27 [INFO]: Organization access check completed
+2025-09-04 16:13:27 [INFO]: Generating company growth report
+2025-09-04 16:13:27 [INFO]: Cache hit for company growth
+2025-09-04 16:13:27 [INFO]: Company growth report generated
+2025-09-04 16:13:43 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Microsoft
+2025-09-04 16:13:43 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:13:43 [INFO]: ✅ Token verified
+2025-09-04 16:13:43 [INFO]: Organization access check completed
+2025-09-04 16:13:43 [INFO]: Generating company growth report
+2025-09-04 16:13:43 [INFO]: Cache hit for company growth
+2025-09-04 16:13:43 [INFO]: Company growth report generated
+2025-09-04 16:15:19 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 16:15:19 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:15:19 [INFO]: ✅ Token verified
+2025-09-04 16:15:19 [INFO]: Organization access check completed
+2025-09-04 16:15:19 [INFO]: Generating competition report
+2025-09-04 16:15:19 [INFO]: Cache miss - fetching job count from database
+2025-09-04 16:15:19 [INFO]: Successfully fetched and cached job count
+2025-09-04 16:15:19 [INFO]: Competition report generated
+2025-09-04 16:16:58 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 16:16:58 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:16:58 [INFO]: ✅ Token verified
+2025-09-04 16:16:58 [INFO]: Organization access check completed
+2025-09-04 16:16:58 [INFO]: Generating competition report
+2025-09-04 16:16:58 [INFO]: Cache hit for job count by company
+2025-09-04 16:16:58 [INFO]: Competition report generated
+2025-09-04 16:17:47 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Microsoft
+2025-09-04 16:17:47 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:17:47 [INFO]: ✅ Token verified
+2025-09-04 16:17:47 [INFO]: Organization access check completed
+2025-09-04 16:17:47 [INFO]: Generating company growth report
+2025-09-04 16:17:47 [INFO]: Cache hit for company growth
+2025-09-04 16:17:47 [INFO]: Company growth report generated
+2025-09-04 16:18:49 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=2
+2025-09-04 16:18:49 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:18:49 [INFO]: ✅ Token verified
+2025-09-04 16:18:49 [INFO]: Organization access check completed
+2025-09-04 16:18:49 [INFO]: Generating company growth report
+2025-09-04 16:18:49 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 16:18:49 [INFO]: Query details
+2025-09-04 16:18:49 [INFO]: Found jobs for company
+2025-09-04 16:18:49 [INFO]: Successfully fetched and cached company growth
+2025-09-04 16:18:49 [INFO]: Company growth report generated
+2025-09-04 16:20:23 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:20:24 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=2
+2025-09-04 16:20:24 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:20:24 [INFO]: ✅ Token verified
+2025-09-04 16:20:24 [INFO]: Organization access check completed
+2025-09-04 16:20:24 [INFO]: Generating company growth report
+2025-09-04 16:20:24 [INFO]: Cache hit for company growth
+2025-09-04 16:20:24 [INFO]: Company growth report generated
+2025-09-04 16:20:31 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Microsoft
+2025-09-04 16:20:31 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:20:31 [INFO]: ✅ Token verified
+2025-09-04 16:20:31 [INFO]: Organization access check completed
+2025-09-04 16:20:31 [INFO]: Generating company growth report
+2025-09-04 16:20:31 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 16:20:31 [INFO]: Available companies in database
+2025-09-04 16:20:31 [INFO]: Query details
+2025-09-04 16:20:31 [INFO]: Found jobs for company
+2025-09-04 16:20:31 [INFO]: Successfully fetched and cached company growth
+2025-09-04 16:20:31 [INFO]: Company growth report generated
+2025-09-04 16:21:35 [INFO]: Request - Method: GET, URL: /api/analytics/company-growth?company=Google
+2025-09-04 16:21:35 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:21:35 [INFO]: ✅ Token verified
+2025-09-04 16:21:35 [INFO]: Organization access check completed
+2025-09-04 16:21:35 [INFO]: Generating company growth report
+2025-09-04 16:21:35 [INFO]: Cache miss - fetching company growth from database
+2025-09-04 16:21:35 [INFO]: Available companies in database
+2025-09-04 16:21:35 [INFO]: Query details
+2025-09-04 16:21:35 [INFO]: Found jobs for company
+2025-09-04 16:21:35 [INFO]: Successfully fetched and cached company growth
+2025-09-04 16:21:35 [INFO]: Company growth report generated
+2025-09-04 16:21:48 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2025-12-31&limit=5
+2025-09-04 16:21:48 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:21:48 [INFO]: ✅ Token verified
+2025-09-04 16:21:48 [INFO]: Organization access check completed
+2025-09-04 16:21:48 [INFO]: Generating competition report
+2025-09-04 16:21:48 [INFO]: Cache miss - fetching job count from database
+2025-09-04 16:21:48 [INFO]: Successfully fetched and cached job count
+2025-09-04 16:21:48 [INFO]: Competition report generated
+2025-09-04 16:21:58 [INFO]: Request - Method: GET, URL: /api/analytics/competition
+2025-09-04 16:21:58 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:21:58 [INFO]: ✅ Token verified
+2025-09-04 16:21:59 [INFO]: Organization access check completed
+2025-09-04 16:21:59 [INFO]: Generating competition report
+2025-09-04 16:21:59 [INFO]: Cache miss - fetching job count from database
+2025-09-04 16:21:59 [INFO]: Successfully fetched and cached job count
+2025-09-04 16:21:59 [INFO]: Competition report generated
+2025-09-04 16:22:07 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 16:22:07 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:22:07 [INFO]: ✅ Token verified
+2025-09-04 16:22:07 [INFO]: Organization access check completed
+2025-09-04 16:22:07 [INFO]: Comparing companies
+2025-09-04 16:22:07 [INFO]: Cache hit for job count by company
+2025-09-04 16:22:07 [INFO]: Company comparison completed
+2025-09-04 16:22:26 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:22:29 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:22:32 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:22:35 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:22:40 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:06 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:09 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:10 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 16:24:10 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:24:10 [INFO]: ✅ Token verified
+2025-09-04 16:24:10 [INFO]: Organization access check completed
+2025-09-04 16:24:10 [INFO]: Comparing companies
+2025-09-04 16:24:10 [INFO]: Cache hit for job count by company
+2025-09-04 16:24:10 [INFO]: Company comparison completed
+2025-09-04 16:24:17 [INFO]: Request - Method: GET, URL: /api/analytics/competition?startDate=2024-01-01&endDate=2025-12-31&limit=5
+2025-09-04 16:24:17 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:24:17 [INFO]: ✅ Token verified
+2025-09-04 16:24:17 [INFO]: Organization access check completed
+2025-09-04 16:24:17 [INFO]: Generating competition report
+2025-09-04 16:24:17 [INFO]: Cache hit for job count by company
+2025-09-04 16:24:17 [INFO]: Competition report generated
+2025-09-04 16:24:22 [INFO]: Request - Method: POST, URL: /api/analytics/compare-companies
+2025-09-04 16:24:22 [INFO]: 🔥 auth.middleware triggered
+2025-09-04 16:24:22 [INFO]: ✅ Token verified
+2025-09-04 16:24:22 [INFO]: Organization access check completed
+2025-09-04 16:24:22 [INFO]: Comparing companies
+2025-09-04 16:24:22 [INFO]: Cache hit for job count by company
+2025-09-04 16:24:22 [INFO]: Company comparison completed
+2025-09-04 16:24:36 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:39 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:43 [INFO]: 🚀 Server is running on http://localhost:5000
+2025-09-04 16:24:48 [INFO]: 🚀 Server is running on http://localhost:5000

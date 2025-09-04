@@ -1,5 +1,6 @@
 import { getRabbitMQChannel } from "../../config/rabbitmq";
 import { sendInviteEmail } from '../../utils/emailHelper';
+import { ConsumeMessage } from "amqplib";
 
 const QUEUE_NAME = 'invite-email';
 
@@ -10,17 +11,17 @@ export const startEmailConsumer = async () => {
 
   console.log(`📥 Listening for email jobs on queue "${QUEUE_NAME}"`);
 
-  channel.consume(QUEUE_NAME, async (msg) => {
-    if (msg) {
-      try {
-        const { email, orgId } = JSON.parse(msg.content.toString());
-        await sendInviteEmail(email, orgId);
-        channel.ack(msg);
-        console.log(`✅ Email sent to ${email}`);
-      } catch (error) {
-        console.error(`❌ Failed to process message`, error);
-        channel.nack(msg, false, false);
-      }
+channel.consume(QUEUE_NAME, async (msg: ConsumeMessage | null) => {
+  if (msg) {
+    try {
+      const { email, orgId } = JSON.parse(msg.content.toString());
+      await sendInviteEmail(email, orgId);
+      channel.ack(msg);
+      console.log(`✅ Email sent to ${email}`);
+    } catch (error) {
+      console.error(`❌ Failed to process message`, error);
+      channel.nack(msg, false, false);
     }
-  });
-};
+  }
+});
+}
