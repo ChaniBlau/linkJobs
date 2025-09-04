@@ -1,32 +1,38 @@
-//פונקציית בדיקת התחברות
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import logger from '../utils/logger'; // ⬅️ הוספנו את הלוגר
+import logger from '../utils/logger'; 
+import { PrismaClient } from '@prisma/client';
 
-const users = [
-  { id: 1, email: 'test@example.com', passwordHash: bcrypt.hashSync('123456', 10) },
-];
+const prisma = new PrismaClient();
 
 export const loginUser = async (email: string, password: string) => {
   logger.info(`Attempting login for email: ${email}`);
 
-  const user = users.find(u => u.email === email);
+  const user = await prisma.user.findUnique({
+    where: { email }
+  });
+
   if (!user) {
     logger.warn(`Login failed - user not found: ${email}`);
     throw new Error('User not found');
   }
 
-  const isMatch = await bcrypt.compare(password, user.passwordHash);
+  const isMatch = await bcrypt.compare(password, user.hashed_password);
   if (!isMatch) {
     logger.warn(`Login failed - invalid password for user: ${email}`);
     throw new Error('Invalid password');
   }
 
-  const token = jwt.sign({ userId: user.id }, 'secret_key', { expiresIn: '1h' });
-  logger.info(`Login successful for user: ${email}`);
-  // const token = jwt.sign({ userId: user.id, role: user.role }, 'secret_key', { expiresIn: '1h' });
-  return token;
-
+  const token = jwt.sign(
+    { 
+      id: user.id, 
+      role: user.role,
+      organizationId: user.organizationId 
+    }, 
+    process.env.JWT_SECRET || 'secret_key', 
+    { expiresIn: '7d' }
+  );
   
-
+  logger.info(`Login successful for user: ${email}`);
+  return { token, user: { id: user.id, email: user.email, role: user.role, name: user.name } };
 };

@@ -9,31 +9,18 @@ import {
   leaveGroup,
   listUserGroups,
 } from '../api/group.controller';
+import { authorize } from '../middlewares/authorize.middleware';
 
 const router = Router();
 
-// כל המסלולים דורשים אימות (JWT)
 router.use(authenticate);
 
-// קבוצה חדשה (SUPER_ADMIN בלבד)
-router.post('/', createGroup);
-
-// עדכון קבוצה (SUPER_ADMIN בלבד)
-router.put('/:id', updateGroup);
-
-// מחיקת קבוצה (SUPER_ADMIN בלבד)
-router.delete('/:id', deleteGroup);
-
-// שליפת כל הקבוצות (לכל משתמש רשום)
+router.post('/', authenticate, authorize(['SUPER_ADMIN']), createGroup);
+router.put('/:id',authenticate, authorize(['SUPER_ADMIN']), updateGroup);
+router.delete('/:id',authenticate,authorize(['SUPER_ADMIN']), deleteGroup);
 router.get('/', listAllGroups);
-
-// שליפת הקבוצות של המשתמש המחובר
 router.get('/my', listUserGroups);
-
-// הצטרפות לקבוצה
 router.post('/:groupId/join', joinGroup);
-
-// עזיבת קבוצה
 router.delete('/:groupId/leave', leaveGroup);
 
 export default router;
