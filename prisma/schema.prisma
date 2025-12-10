@@ -7,40 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  SUPER_ADMIN
-  ORG_ADMIN
-  RECRUITER
-  VIEWER
-}
-
-enum GroupStatus {
-  ACTIVE
-  INACTIVE
-  PENDING
-}
-
-enum JoinRequestStatus {
-  PENDING
-  APPROVED
-  REJECTED
-}
-
-enum LicensePlan {
-  BASIC
-  PROFESSIONAL
-  ENTERPRISE
-}
-
-enum LicenseStatus {
-  ACTIVE
-  EXPIRED
-  CANCELED
-}
-
 model License {
   id             Int           @id @default(autoincrement())
-  organization   Organization  @relation(fields: [organizationId], references: [id])
   organizationId Int
   plan           LicensePlan
   seatsAllocated Int
@@ -50,32 +18,37 @@ model License {
   endDate        DateTime
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+  organization   Organization  @relation(fields: [organizationId], references: [id])
 }
 
 model User {
-  id              Int           @id @default(autoincrement())
-  name            String
-  email           String        @unique
-  hashed_password String
-  role            Role          @default(VIEWER)
-  organizationId  Int?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  Keywords        Keyword[]
-  SavedSearches   SavedSearch[]
-  Organization    Organization? @relation(fields: [organizationId], references: [id])
-  Groups          UserGroup[]
-  joinRequests    JoinRequest[]
+  id                Int                @id @default(autoincrement())
+  name              String
+  email             String             @unique
+  hashed_password   String
+  role              Role               @default(VIEWER)
+  organizationId    Int?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  integrations      Integration[]
+  joinRequests      JoinRequest[]
+  Keywords          Keyword[]
+  notificationLogs  NotificationLog[]
+  notificationRules NotificationRule[]
+  SavedSearches     SavedSearch[]
+  Organization      Organization?      @relation(fields: [organizationId], references: [id])
+  Groups            UserGroup[]
 }
 
 model Organization {
   id           Int           @id @default(autoincrement())
   name         String
-  users        User[]
-  licenses     License[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+  integrations Integration[]
   joinRequests JoinRequest[]
+  licenses     License[]
+  users        User[]
 }
 
 model Group {
@@ -83,8 +56,8 @@ model Group {
   name          String
   linkedinUrl   String       @unique
   status        GroupStatus  @default(ACTIVE)
-  scheduledHour Int? // 0-23, השעה בה יש להריץ
-  timezone      String? // לדוגמה: "Asia/Jerusalem"
+  scheduledHour Int?
+  timezone      String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   JobPostings   JobPosting[]
@@ -141,21 +114,132 @@ model JobKeyword {
 }
 
 model SavedSearch {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  name      String
-  keywords  String[]
-  daysRange Int
-  createdAt DateTime @default(now())
-  User      User     @relation(fields: [userId], references: [id])
+  id                Int                @id @default(autoincrement())
+  userId            Int
+  name              String
+  keywords          String[]
+  daysRange         Int
+  createdAt         DateTime           @default(now())
+  notificationRules NotificationRule[]
+  User              User               @relation(fields: [userId], references: [id])
 }
 
 model JoinRequest {
   id             Int               @id @default(autoincrement())
-  user           User              @relation(fields: [userId], references: [id])
   userId         Int
-  organization   Organization      @relation(fields: [organizationId], references: [id])
   organizationId Int
   status         JoinRequestStatus @default(PENDING)
   createdAt      DateTime          @default(now())
+  organization   Organization      @relation(fields: [organizationId], references: [id])
+  user           User              @relation(fields: [userId], references: [id])
+}
+
+model Integration {
+  id              Int           @id @default(autoincrement())
+  userId          Int?
+  organizationId  Int?
+  slackWebhookUrl String?
+  fcmTokens       String[]      @default([])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  Organization    Organization? @relation(fields: [organizationId], references: [id])
+  User            User?         @relation(fields: [userId], references: [id])
+}
+
+model NotificationRule {
+  id               Int                   @id @default(autoincrement())
+  userId           Int
+  name             String
+  active           Boolean               @default(true)
+  trigger          NotificationTrigger
+  channels         NotificationChannel[]
+  frequency        NotificationFrequency @default(INSTANT)
+  minScore         Int?
+  groupsFilter     Int[]
+  companiesFilter  String[]
+  keywords         String[]
+  savedSearchId    Int?
+  timezone         String?
+  scheduleHour     Int?
+  avedSearchId     Int?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  notificationLogs NotificationLog[]
+  SavedSearch      SavedSearch?          @relation(fields: [savedSearchId], references: [id])
+  User             User                  @relation(fields: [userId], references: [id])
+}
+
+model NotificationLog {
+  id               Int                 @id @default(autoincrement())
+  userId           Int
+  ruleId           Int?
+  channel          NotificationChannel
+  trigger          NotificationTrigger
+  jobId            Int?
+  payloadHash      String
+  sentAt           DateTime            @default(now())
+  status           String
+  error            String?
+  meta             Json?
+  NotificationRule NotificationRule?   @relation(fields: [ruleId], references: [id])
+  User             User                @relation(fields: [userId], references: [id])
+}
+
+model EventOutbox {
+  id        Int      @id @default(autoincrement())
+  type      String
+  payload   Json
+  createdAt DateTime @default(now())
+  processed Boolean  @default(false)
+}
+
+enum Role {
+  SUPER_ADMIN
+  ORG_ADMIN
+  RECRUITER
+  VIEWER
+}
+
+enum GroupStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+enum JoinRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LicensePlan {
+  BASIC
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+enum LicenseStatus {
+  ACTIVE
+  EXPIRED
+  CANCELED
+}
+
+enum NotificationChannel {
+  EMAIL
+  SLACK
+  PUSH
+}
+
+enum NotificationTrigger {
+  NEW_JOB_MATCH
+  SAVED_SEARCH_MATCH
+  GROUP_DIGEST
+  LICENSE_ALERT
+}
+
+enum NotificationFrequency {
+  INSTANT
+  HOURLY
+  DAILY
+  WEEKLY
 }

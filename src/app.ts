@@ -14,6 +14,7 @@ import jobRoutes from './routes/job.routes';
 import keywordRoutes from './routes/keyword.routes';
 import licenseRoutes from './routes/license.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import notificationRoutes from "./routes/notification.routes";
 
 import { authenticate } from './middlewares/auth.middleware';
 import loggerMiddleware from './middlewares/logger.middleware';
@@ -37,6 +38,7 @@ app.use('/api/jobs', jobRoutes);
 app.use('/api/keywords', authenticate, keywordRoutes);
 app.use('/api/licenses', licenseRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get('/api/protected', authenticate, (req, res) => {
   res.json({ message: 'Access granted!' });
