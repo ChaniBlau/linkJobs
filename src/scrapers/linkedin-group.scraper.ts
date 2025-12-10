@@ -2,6 +2,8 @@ import { Page } from 'puppeteer';
 import puppeteer from 'puppeteer-extra';
 import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import logger from '../utils/logger';
+import redis from '../config/redis';
+
 
 puppeteer.use(StealthPlugin());
 
@@ -79,6 +81,12 @@ export async function scrapeLinkedInGroupPosts(
   try {
     await loginToLinkedIn(page, email, password);
 
+    const cacheKey = `linkedin:groupPosts:${groupUrl}`;
+    const cached = await redis.get(cacheKey);
+    if (cached) {
+      logger.info('♻️ Loaded posts from Redis cache');
+      return JSON.parse(cached); // Return cached posts
+    }
     logger.info("📥 Navigating to group page...");
     await page.goto(groupUrl, { waitUntil: 'networkidle2' });
 
@@ -95,6 +103,8 @@ export async function scrapeLinkedInGroupPosts(
         .map(el => (el as HTMLElement).innerText.trim())
         .filter(text => text.length >= minLen);
     }, POST_SELECTORS, MIN_POST_LENGTH);
+
+    await redis.set(cacheKey, JSON.stringify(posts), { EX: 60 * 60 * 5 });
 
     logger.info(`✅ Found ${posts.length} posts (after filtering)`);
     return posts;

@@ -1,11 +1,25 @@
 import app from './app';
 import logger from './utils/logger';
-const PORT = process.env.PORT || 3000;
+import { scheduleTimezoneBasedScraping } from './scheduler/scrapeScheduler';
+import { bullBoardRouter } from './dashboard/bullDashboard';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const PORT = process.env.PORT || 5000;
+app.use('/admin/queues', bullBoardRouter);
 
 app.listen(PORT, () => {
   if (!process.env.JWT_SECRET) {
-  console.error('❌ JWT_SECRET is not defined in environment variables!');
-  process.exit(1);
+    console.error('❌ JWT_SECRET is not defined in environment variables!');
+    process.exit(1);
   }
+
   logger.info(`🚀 Server is running on http://localhost:${PORT}`);
+
+  scheduleTimezoneBasedScraping(); 
+
 });
+
+
+
+
