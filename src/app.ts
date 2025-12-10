@@ -3,22 +3,7 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { authorize } from './middlewares/authorize.middleware';
-import { startEmailConsumer } from './queues/consumers/email.consumer';
-
-import organizationRoutes from './routes/organization.routes';
-import groupRoutes from './routes/group.routes';
-import organizationUsersRoutes from './routes/organizationUsers.routes';
-import authRoutes from './routes/auth.routes';
-import jobRoutes from './routes/job.routes';
-import keywordRoutes from './routes/keyword.routes';
-import licenseRoutes from './routes/license.routes';
-import analyticsRoutes from './routes/analytics.routes';
-import notificationRoutes from "./routes/notification.routes";
-
-import { authenticate } from './middlewares/auth.middleware';
-import loggerMiddleware from './middlewares/logger.middleware';
-import { errorHandler } from './middlewares/errorHandler.middleware';
+import jobRoutes from "./routes/job.routes";
 
 dotenv.config();
 const app = express();
@@ -30,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/api/jobs", jobRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/organizations', organizationRoutes);
 app.use('/api/groups', groupRoutes);

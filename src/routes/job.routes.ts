@@ -1,3 +1,9 @@
+import { Router } from "express";
+import { detectJobPosts } from "../api/jobs/job.controller";
+
+const router = Router();
+
+router.post("/detect", detectJobPosts);
 import { Router } from 'express';
 import { getAllJobs } from '../api/jobs/jobs.controller';
 import { authenticate } from '../middlewares/auth.middleware';
